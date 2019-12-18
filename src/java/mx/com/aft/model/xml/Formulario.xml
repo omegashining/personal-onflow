@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.formularios">
+    
+    <resultMap id="resultFormulario" type="mx.com.aft.model.entities.Formulario">
+        <id property="idFormulario" column="id_formulario" />
+        <result property="nombre" column="nombre" />
+        <result property="variables" column="variables" />
+        <result property="habilitado" column="habilitado" />
+        <result property="eliminable" column="eliminable" />
+        <result property="eliminado" column="eliminado" />
+        
+        <result property="documento.idDocumento" column="id_documento" />
+        <result property="documento.nombre" column="nombre_documento" />
+    </resultMap>
+    
+    <select id="recuperaFormularios" parameterType="mx.com.aft.model.entities.Formulario" resultMap="resultFormulario">
+        SELECT F.id_formulario, F.nombre, F.variables, F.habilitado, F.eliminable, F.eliminado,
+               D.id_documento, D.nombre nombre_documento
+        FROM aft.formularios F
+           LEFT JOIN aft.documentos D
+              ON D.id_documento = F.documentos_id_documento
+	WHERE F.id_formulario >= 0
+        AND F.eliminado = 0
+    </select>
+    
+    <select id="recuperaFormularioPorId" parameterType="int" resultMap="resultFormulario">
+        SELECT F.id_formulario, F.nombre, F.variables, F.habilitado, F.eliminable, F.eliminado,
+               D.id_documento, D.nombre nombre_documento
+        FROM aft.formularios F
+           LEFT JOIN aft.documentos D
+              ON D.id_documento = F.documentos_id_documento
+	WHERE F.id_formulario = #{id}
+    </select>
+    
+    <insert id="agregaFormulario" parameterType="mx.com.aft.model.entities.Formulario" useGeneratedKeys="true" keyProperty="idFormulario">
+        INSERT INTO aft.formularios (nombre, variables, habilitado, eliminable, eliminado, documentos_id_documento)
+        VALUES (#{nombre}, #{variables}, #{habilitado}, #{eliminable}, #{eliminado}, #{documento.idDocumento})
+    </insert>
+    
+    <update id="actualizaFormulario" parameterType="mx.com.aft.model.entities.Formulario">
+        UPDATE aft.formularios F SET
+        F.nombre = #{nombre}
+        , F.variables = #{variables}
+        WHERE F.id_formulario = #{idFormulario}
+    </update>
+    
+    <update id="eliminaFormulario" parameterType="int">
+        UPDATE aft.formularios F SET
+        F.eliminado = 1
+        WHERE F.id_formulario = #{id}
+    </update>
+    
+</mapper>

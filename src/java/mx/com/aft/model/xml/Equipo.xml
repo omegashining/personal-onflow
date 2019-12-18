@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.equipos">
+    
+    <resultMap id="resultEquipo" type="mx.com.aft.model.entities.Equipo">
+        <id property="idEquipo" column="id_equipo" />
+        <result property="nombre" column="nombre" />
+        <result property="habilitado" column="habilitado" />
+        <result property="eliminable" column="eliminable" />
+        <result property="eliminado" column="eliminado" />
+    </resultMap>
+    
+    <select id="recuperaEquipos" parameterType="mx.com.aft.model.entities.Equipo" resultMap="resultEquipo">
+        SELECT E.id_equipo, E.nombre, E.habilitado, E.eliminable, E.eliminado
+        FROM aft.equipos E
+	WHERE E.id_equipo > 0
+        AND E.eliminado = 0
+    </select>
+    
+    <select id="recuperaEquipoPorId" parameterType="int" resultMap="resultEquipo">
+        SELECT E.id_equipo, E.nombre, E.habilitado, E.eliminable, E.eliminado
+        FROM aft.equipos E
+	WHERE E.id_equipo = #{id}
+    </select>
+    
+    <insert id="agregaEquipo" parameterType="mx.com.aft.model.entities.Equipo" useGeneratedKeys="true" keyProperty="idEquipo">
+        INSERT INTO aft.equipos (nombre, habilitado, eliminable, eliminado)
+        VALUES (#{nombre}, #{habilitado}, #{eliminable}, #{eliminado})
+    </insert>
+    
+    <update id="actualizaEquipo" parameterType="mx.com.aft.model.entities.Equipo">
+        UPDATE aft.equipos E SET
+        E.nombre = #{nombre}
+        WHERE E.id_equipo = #{idEquipo}
+    </update>
+    
+    <update id="eliminaEquipo" parameterType="int">
+        UPDATE aft.equipos E SET
+        E.habilitado = 0
+        , E.eliminado = 1
+        WHERE E.id_equipo = #{id}
+    </update>
+    
+</mapper>

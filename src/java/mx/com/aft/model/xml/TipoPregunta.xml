@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.tipospregunta">
+    
+    <resultMap id="resultTipoPregunta" type="mx.com.aft.model.entities.TipoPregunta">
+        <id property="idTipoPregunta" column="id_tipo_pregunta" />
+        <result property="idTipoPreguntaChar" column="id_tipo_pregunta_char" />
+        <result property="nombre" column="nombre" />
+        <result property="descripcion" column="descripcion" />
+        <result property="habilitado" column="habilitado" />
+        <result property="eliminable" column="eliminable" />
+        <result property="eliminado" column="eliminado" />
+    </resultMap>
+    
+    <select id="recuperaTiposPregunta" parameterType="mx.com.aft.model.entities.TipoPregunta" resultMap="resultTipoPregunta">
+        SELECT TP.id_tipo_pregunta, TP.id_tipo_pregunta_char, TP.nombre, TP.descripcion, TP.habilitado, TP.eliminable, TP.eliminado
+        FROM aft.tipos_pregunta TP
+	WHERE TP.id_tipo_pregunta > 0
+    </select>
+    
+    <select id="recuperaTipoPreguntaPorId" parameterType="int" resultMap="resultTipoPregunta">
+        SELECT TP.id_tipo_pregunta, TP.id_tipo_pregunta_char, TP.nombre, TP.descripcion, TP.habilitado, TP.eliminable, TP.eliminado
+        FROM aft.tipos_pregunta TP
+	WHERE TP.id_tipo_pregunta = #{id}
+    </select>
+    
+    <insert id="agregaTipoPregunta" parameterType="mx.com.aft.model.entities.TipoPregunta" useGeneratedKeys="true" keyProperty="idTipoPregunta">
+        INSERT INTO aft.tipos_pregunta (id_tipo_pregunta_char, nombre, descripcion, habilitado, eliminable, eliminado)
+        VALUES (#{idTipoPreguntaChar}, #{nombre}, #{descripcion}, #{habilitado}, #{eliminable}, #{eliminado})
+    </insert>
+    
+    <update id="actualizaTipoPregunta" parameterType="mx.com.aft.model.entities.TipoPregunta">
+        UPDATE aft.tipos_pregunta TP SET
+        TP.nombre = #{nombre}
+        <if test="idTipoPreguntaChar != null and idTipoPreguntaChar != ''">
+            , TP.id_tipo_pregunta_char = #{idTipoPreguntaChar}
+        </if>
+        <if test="descripcion != null and descripcion != ''">
+            , TP.descripcion = #{descripcion}
+        </if>
+        WHERE TP.id_tipo_pregunta = #{idTipoPregunta}
+    </update>
+    
+    <update id="eliminaTipoPregunta" parameterType="int">
+        UPDATE aft.tipos_pregunta TP SET
+        TP.eliminado = 1
+        WHERE TP.id_tipo_pregunta = #{id}
+    </update>
+    
+</mapper>

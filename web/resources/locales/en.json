@@ -1,0 +1,129 @@
+{
+  "app":{
+    "name": "Lotar 1.0"
+  },
+  "login": {
+    "welcome": "Welcome to Lotar",
+    "logout": "The session was successfully closed.",
+    "message": "Login with any of your accounts in social networks.",
+    "facebook": "Enter with Facebook",
+    "twitter": "Enter with Twitter",
+    "google": "Enter with Google",
+    "email": "* Email :",
+    "password": "* Password :",
+    "rememberme": "Remember me :",
+    "required": "Required (*)",
+    "enter": "Login",
+    "forgotten": "Forgot your password?",
+    "noaccount": "No account?",
+    "createaccount": "Create account"
+  },
+  "signup": {
+    "registration": "Lotar registration form",
+    "message": "Please fill out all fields marked as required.",
+    "username": "Username *",
+    "firstname": "First Name *",
+    "lastname": "Last Name *",
+    "email": "Email *",
+    "password": "Password *",
+    "confirm": "Confirm Password *",
+    "required": "Required (*)",
+    "enter": "Send Form"
+  },
+  "side":{
+    "dashboard": "Dashboards",
+    "transactions": "Transactions"
+  },
+  "body": {
+  },
+  "nav": {
+    "logout": "Logout"
+  },
+  "foot": {
+    "language": "Language"
+  },
+  "home": {
+    "invest": "Invest",
+    "investments": "Investments"
+  },
+  "investment": {
+    "welcome": "Welcome",
+    "email": "Email",
+    "deposits1": "For cash investments.",
+    "deposits2": "1. Make your deposit in the following bank account:",
+    "deposits3": "Bank: Scotiabank (Inverlat Express)",
+    "deposits4": "Name: Kalep González Blanco",
+    "deposits5": "Account: 18502443058",
+    "deposits6": "Bank branch: 008",
+    "deposits7": "CLABE: 044060185024430580",
+    "deposits8": "2. Send your payment voucher to mail support@lotar.mx or lotar@gmail.com which will be monitored.",
+    "deposits9": "3. Once credited the account balance will be updated.",
+    "oxxo1": "For investments with OXXO.",
+    "oxxo2": "1. Make your deposit in OXXO with the following information:",
+    "oxxo3": "Card Number: 5579 2250 4081 8208",
+    "oxxo4": "2. Send your payment voucher to mail support@lotar.mx or lotar@gmail.com which will be monitored.",
+    "oxxo5": "3. Once credited the account balance will be updated.",
+    "confirm": "Enter the code you received by mail to validate your account.",
+    "resend": "If you did not receive the email, click the following link to send it again.",
+    "send": "Send",
+    "title1": "Investment",
+    "subtitle1": "Data for investment",
+    "important": "¡IMPORTANT!",
+    "importantmessage1": "When paying with this currency it will be charged a fee because the platform makes a conversion to Bitcoins.",
+    "importantmessage2": "Sorry, temporarily you can not make transactions with this cryptocoin.",
+    "coin": "Coin",
+    "amount": "Amount",
+    "amountbtc": "Amount (BTC)",
+    "fee": "Fee (BTC)",
+    "bankcoins": "Bankcoins to receive",
+    "required": "(*) Required",
+    "title2": "Payment",
+    "subtitle2": "Data to pay",
+    "informative": "¡INFORMATIVE!",
+    "informativemessage": "It has not yet paid or is in the process of validation.",
+    "token": "Address to deposit",
+    "lastdeposits": "Last Deposits",
+    "datetime": "Datetime",
+    "quantity": "Quantity",
+    "tax": "Tax",
+    "total": "Total",
+    "status": "Status",
+    "title3": "Summary",
+    "subtitle3": "Informative data",
+    "end": "End Investment",
+    "investment": "Investment",
+    "btcinvestment": "Investment in Bitcoins:",
+    "bnkinvestment": "My Bankcoins:",
+    "balance": "Balance in the Wallets",
+    "btcbalance": "BTC:",
+    "ltcbalance": "LTC :",
+    "etcbalance": "ETC:",
+    "ethbalance": "ETH:",
+    "nxtbalance": "NXT:",
+    "wavesbalance": "WAVES:",
+    "pesosbalance": "PESOS:",
+    "logout": "Logout"
+  },
+  "transactionsinvest": {
+    "title": "Investments",
+    "datetime": "Datetime",
+    "coin": "Coin",
+    "quantity": "Quantity",
+    "bitcoins": "Bitcoins",
+    "bankcoins": "Bankcoins",
+    "status": "Status"
+  },
+  "dashboard": {
+    "price": "Price",
+    "volume": "Volume",
+    "market": "Market Capitalization",
+    "avaiable": "Available Supply",
+    "total": "Total Supply",
+    "rate": "Rate",
+    "lasthours": "Last 24 hours",
+    "lastday": "Last day",
+    "lasthour": "Last hour",
+    "lastdays": "Last 7 days"
+  }
+
+}

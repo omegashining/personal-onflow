@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.usuarios">
+    
+    <resultMap id="resultUsuario" type="mx.com.aft.model.entities.Usuario">
+        <id property="idUsuario" column="id_usuario" />
+        <result property="username" column="username" />
+        <result property="password" column="password" />
+        <result property="nombre" column="nombre" />
+        <result property="paterno" column="paterno" />
+        <result property="materno" column="materno" />
+        <result property="correo" column="correo" />
+        <result property="habilitado" column="habilitado" />
+        <result property="eliminable" column="eliminable" />
+        <result property="eliminado" column="eliminado" />
+        <result property="bloqueado" column="bloqueado" />
+        
+        <result property="rol.idRol" column="id_rol" />
+        <result property="rol.idRolChar" column="id_rol_char" />
+        <result property="rol.nombre" column="nombre_rol" />
+        <result property="rol.descripcion" column="descripcion_rol" />
+        <result property="rol.prioridad" column="prioridad" />
+        <result property="rol.habilitado" column="habilitado_rol" />
+        <result property="rol.eliminable" column="eliminable_rol" />
+        <result property="rol.eliminado" column="eliminado_rol" />
+    </resultMap>
+    
+    <select id="recuperaUsuarios" parameterType="mx.com.aft.model.entities.Usuario" resultMap="resultUsuario">
+        SELECT U.id_usuario, U.username, U.password, U.nombre, U.paterno, U.materno, U.correo, U.habilitado, U.eliminable, U.eliminado, U.bloqueado,
+               R.id_rol, R.id_rol_char, R.nombre nombre_rol, R.descripcion descripcion_rol, R.prioridad, R.habilitado habilitado_rol, R.eliminable eliminable_rol, R.eliminado eliminado_rol
+        FROM aft.usuarios U
+           LEFT JOIN aft.roles R
+              ON R.id_rol = U.roles_id_rol
+	WHERE U.id_usuario > 1
+        AND U.eliminado = 0
+    </select>
+    
+    <select id="recuperaUsuariosPorEquipo" parameterType="int" resultMap="resultUsuario">
+        SELECT U.id_usuario, U.username, U.password, U.nombre, U.paterno, U.materno, U.correo, U.habilitado, U.eliminable, U.eliminado, U.bloqueado,
+               R.id_rol, R.id_rol_char, R.nombre nombre_rol, R.descripcion descripcion_rol, R.prioridad, R.habilitado habilitado_rol, R.eliminable eliminable_rol, R.eliminado eliminado_rol
+        FROM aft.usuarios U
+           LEFT JOIN aft.equipos_usuarios EU
+              ON EU.usuarios_id_usuario = U.id_usuario
+	   LEFT JOIN aft.roles R
+              ON R.id_rol = EU.roles_id_rol
+	   LEFT JOIN aft.equipos E
+              ON E.id_equipo = EU.equipos_id_equipo
+	WHERE E.id_equipo = #{id}
+    </select>
+    
+    <select id="recuperaUsuarioPorId" parameterType="int" resultMap="resultUsuario">
+        SELECT U.id_usuario, U.username, U.password, U.nombre, U.paterno, U.materno, U.correo, U.habilitado, U.eliminable, U.eliminado, U.bloqueado,
+               R.id_rol, R.id_rol_char, R.nombre nombre_rol, R.descripcion descripcion_rol, R.prioridad, R.habilitado habilitado_rol, R.eliminable eliminable_rol, R.eliminado eliminado_rol
+        FROM aft.usuarios U
+           LEFT JOIN aft.roles R
+              ON R.id_rol = U.roles_id_rol
+	WHERE U.id_usuario = #{id}
+    </select>
+    
+    <select id="recuperaUsuarioPorUsername" parameterType="string" resultMap="resultUsuario">
+        SELECT U.id_usuario, U.username, U.password, U.nombre, U.paterno, U.materno, U.correo, U.habilitado, U.eliminable, U.eliminado, U.bloqueado,
+               R.id_rol, R.id_rol_char, R.nombre nombre_rol, R.descripcion descripcion_rol, R.prioridad, R.habilitado habilitado_rol, R.eliminable eliminable_rol, R.eliminado eliminado_rol
+        FROM aft.usuarios U
+           LEFT JOIN aft.roles R
+              ON R.id_rol = U.roles_id_rol
+	WHERE U.username = #{id}
+        AND U.eliminado = 0
+    </select>
+    
+    <insert id="agregaUsuario" parameterType="mx.com.aft.model.entities.Usuario" useGeneratedKeys="true" keyProperty="idUsuario">
+        INSERT INTO aft.usuarios (username, password, nombre, paterno, materno, correo, habilitado, eliminable, eliminado, bloqueado, roles_id_rol)
+        VALUES (#{username}, #{password}, #{nombre}, #{paterno}, #{materno}, #{correo}, #{habilitado}, #{eliminable}, #{eliminado}, #{bloqueado}, #{rol.idRol})
+    </insert>
+    
+    <update id="actualizaUsuario" parameterType="mx.com.aft.model.entities.Usuario">
+        UPDATE aft.usuarios U SET
+        U.username = #{username}
+        <if test="password != null and password != ''">
+            , U.password = #{password}
+        </if>
+        <if test="nombre != null and nombre != ''">
+            , U.nombre = #{nombre}
+        </if>
+        <if test="paterno != null and paterno != ''">
+            , U.paterno = #{paterno}
+        </if>
+        <if test="materno != null and materno != ''">
+            , U.materno = #{materno}
+        </if>
+        <if test="correo != null and correo != ''">
+            , U.correo = #{correo}
+        </if>
+        <if test="rol.idRol != 0">
+            , U.roles_id_rol = #{rol.idRol}
+        </if>
+        WHERE U.id_usuario = #{idUsuario}
+    </update>
+    
+    <update id="eliminaUsuario" parameterType="int">
+        UPDATE aft.usuarios U SET
+        U.habilitado = 0
+        , U.eliminado = 1
+        WHERE U.id_usuario = #{id}
+    </update>
+    
+    <update id="actualizaBloqueoUsuario" parameterType="mx.com.aft.model.entities.Usuario">
+        UPDATE aft.usuarios U SET
+        U.bloqueado = #{bloqueado}
+        WHERE U.id_usuario = #{idUsuario}
+    </update>
+
+</mapper>

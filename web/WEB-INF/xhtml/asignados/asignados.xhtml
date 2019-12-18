@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <h:form id="fData" prependId="false">
+        <div class="ibox-content">
+            <div class="table-responsive">
+                <h:dataTable id="dtData" var="row" value="#{asignadosC.list()}" class="table table-striped table-bordered table-hover">
+                    <h:column>
+                        <f:facet name="header">Id</f:facet>
+                        <h:outputText value="#{row.idSubflujo}" />
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Nombre del flujo</f:facet>
+                        <h:outputText value="#{row.nombre}" />
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Fecha de inicio</f:facet>
+                        <h:outputText value="#{row.fechaInicio}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+                        </h:outputText>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Fecha compromiso</f:facet>
+                        <h:outputText value="#{row.fechaCompromiso}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+                        </h:outputText>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Asignado actualmente a</f:facet>
+                        <h:outputText value="#{row.responsable.nombre} #{row.responsable.paterno} #{row.responsable.materno}" />
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Fase actual</f:facet>
+                        <h:outputText value="#{row.pasoActual} / #{row.totalPasos}" />
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Estado</f:facet>
+                        <h:outputText value="#{row.estadoAvance.nombre}" styleClass="estado_#{row.estadoAvance.idEstadoAvanceChar}" />
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Acciones</f:facet>
+                        <h:commandLink action="#{asignadoC.see}" title="Ver">
+                            <h:graphicImage url="/resources/images/png/see.png" />
+                            <f:setPropertyActionListener value="#{row}" target="#{asignadoC.subflujo}" />
+                        </h:commandLink>
+                        <h:commandLink action="#{asignadoC.activity}" title="Realizar Actividad" rendered="#{(row.responsable.idUsuario == sessionC.idUsuario || (sessionC.rol == 'ROLE_ADMIN' and row.estadoAvance.idEstadoAvanceChar != 'C')) ? 'true' : 'false'}">
+                            <h:graphicImage url="/resources/images/png/fill.png" />
+                            <f:setPropertyActionListener value="#{row}" target="#{asignadoC.subflujo}" />
+                        </h:commandLink>
+                        <h:commandLink action="documents" title="Documentos">
+                            <h:graphicImage url="/resources/images/png/files.png" />
+                            <f:setPropertyActionListener value="#{row}" target="#{asignadoC.subflujo}" />
+                        </h:commandLink>
+                        <p:commandLink ajax="false" rendered="#{row.estadoAvance.idEstadoAvanceChar == 'C' ? 'true' : 'false'}" title="Entregable">
+                            <h:graphicImage url="/resources/images/png/word.png" />
+                            <p:fileDownload value="#{asignadosC.getEntregable(row.documento.idDocumento)}" />
+                        </p:commandLink>
+                    </h:column>
+                </h:dataTable>
+            </div>
+        </div>
+    </h:form>
+    
+</ui:composition>

@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <div class="form-group">
+        <h:outputLabel value="Comentarios :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:outputLabel value="#{actividadC.paso.decision.comentarios}" class="control-label text-success" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <h:outputLabel value="Documentos :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:outputLabel value="" class="control-label text-success" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <h:outputLabel value="Decisión :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:selectOneRadio id="option" value="#{actividadC.avanzar}">
+                <f:selectItem itemLabel="Aceptar" itemValue="true" />
+                <f:selectItem itemLabel="Rechazar" itemValue="false" />
+            </h:selectOneRadio>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <h:outputLabel value="Comentarios de la decisión :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:inputTextarea value="#{actividadC.comentarios}" cols="60" rows="4" a:maxlength="255" class="form-control" />
+        </div>
+    </div>
+    
+</ui:composition>

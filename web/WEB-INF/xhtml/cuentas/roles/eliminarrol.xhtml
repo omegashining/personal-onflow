@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <div class="modal inmodal" id="mDelete" tabindex="-1" role="dialog" aria-hidden="true">
+        <h:form id="fDelete">
+            <div class="modal-dialog">
+                <div class="modal-content animated bounceInRight">
+                    <div class="modal-header">
+                        <h:commandButton value="x" actionListener="#{rolC.free()}" immediate="true" class="close" a:data-dismiss="modal">
+                            <span class="sr-only">Close</span>
+                        </h:commandButton>
+                        <i class="fa fa-trash modal-icon"></i>
+                        <h4 class="modal-title">Eliminar Rol</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h:panelGrid columns="2">
+                            <h:graphicImage url="/resources/images/png/warning.png" />
+                            <h:outputText value="¿Está seguro de eliminar el rol #{rolC.rol.nombre}?" />
+                        </h:panelGrid>
+                    </div>
+                    <div class="modal-footer">
+                        <h:commandButton value="Aceptar" action="#{rolesC.delete}" class="btn btn-success" />
+                        <h:commandButton value="Cancelar" actionListener="#{rolC.free()}" immediate="true" class="btn btn-danger" a:data-dismiss="modal" />
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </div>
+    
+</ui:composition>

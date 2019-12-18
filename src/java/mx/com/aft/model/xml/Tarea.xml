@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.tareas">
+    
+    <resultMap id="resultTarea" type="mx.com.aft.model.entities.Tarea">
+        <id property="idTarea" column="id_tarea" />
+        <result property="titulo" column="titulo" />
+        <result property="descripcion" column="descripcion" />
+        <result property="fechaSolicitud" column="fecha_solicitud" />
+        <result property="fechaCompromiso" column="fecha_compromiso" />
+        
+        <result property="criticidad.idCriticidad" column="id_criticidad" />
+        <result property="criticidad.nombre" column="nombre_criticidad" />
+        <result property="criticidad.descripcion" column="descripcion_criticidad" />
+        <result property="criticidad.diasCompromiso" column="dias_compromiso" />
+        <result property="criticidad.habilitado" column="habilitado_criticidad" />
+        <result property="criticidad.eliminable" column="eliminable_criticidad" />
+        <result property="criticidad.eliminado" column="eliminado_criticidad" />
+        
+        <result property="paso.idPaso" column="id_paso" />
+    </resultMap>
+    
+    <select id="recuperaTareaPorPaso" parameterType="int" resultMap="resultTarea">
+        SELECT T.id_tarea, T.titulo, T.descripcion, T.fecha_solicitud, T.fecha_compromiso, T.pasos_id_paso id_paso, 
+               C.id_criticidad, C.nombre nombre_criticidad, C.descripcion descripcion_criticidad, C.dias_compromiso, C.habilitado habilitado_criticidad, C.eliminable eliminable_criticidad, C.eliminado eliminado_criticidad
+        FROM aft.tareas T
+          LEFT JOIN aft.criticidad C
+            ON C.id_criticidad = T.criticidad_id_criticidad
+	WHERE T.pasos_id_paso = #{id}
+    </select>
+    
+    <select id="recuperaTareasPorFlujo" parameterType="int" resultMap="resultTarea">
+        SELECT T.id_tarea
+        FROM aft.tareas T
+          LEFT JOIN aft.pasos P
+            ON P.id_paso = T.pasos_id_paso
+          LEFT JOIN aft.flujos F
+            ON F.id_flujo = P.flujos_id_flujo
+	WHERE F.id_flujo = #{id}
+    </select>
+    
+    <insert id="agregaTarea" parameterType="mx.com.aft.model.entities.Tarea" useGeneratedKeys="true" keyProperty="idTarea">
+        INSERT INTO aft.tareas (titulo, descripcion, fecha_solicitud, fecha_compromiso, pasos_id_paso, criticidad_id_criticidad)
+        VALUES (#{titulo}, #{descripcion}, #{fechaSolicitud}, #{fechaCompromiso}, #{paso.idPaso}, #{criticidad.idCriticidad})
+    </insert>
+    
+    <update id="actualizaTarea" parameterType="mx.com.aft.model.entities.Tarea">
+        UPDATE aft.tareas T SET
+        T.pasos_id_paso = #{paso.idPaso}
+        <if test="titulo != null and titulo != ''">
+            , T.titulo = #{titulo}
+        </if>
+        <if test="descripcion != null and descripcion != ''">
+            , T.descripcion = #{descripcion}
+        </if>
+        <if test="fechaSolicitud != null">
+            , T.fecha_solicitud = #{fechaSolicitud}
+        </if>
+        <if test="fechaCompromiso != null">
+            , T.fecha_comprimiso = #{fechaCompromiso}
+        </if>
+        <if test="criticidad.idCriticidad != 0">
+            , T.criticidad_id_criticidad = #{criticidad.idCriticidad}
+        </if>
+        WHERE T.id_tarea = #{idTarea}
+    </update>
+    
+</mapper>

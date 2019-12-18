@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.estadosavance">
+    
+    <resultMap id="resultEstadoAvance" type="mx.com.aft.model.entities.EstadoAvance">
+        <id property="idEstadoAvance" column="id_estado_avance" />
+        <result property="idEstadoAvanceChar" column="id_estado_avance_char" />
+        <result property="nombre" column="nombre" />
+        <result property="descripcion" column="descripcion" />
+        <result property="habilitado" column="habilitado" />
+        <result property="eliminable" column="eliminable" />
+        <result property="eliminado" column="eliminado" />
+    </resultMap>
+    
+    <select id="recuperaEstadosAvance" parameterType="mx.com.aft.model.entities.EstadoAvance" resultMap="resultEstadoAvance">
+        SELECT EA.id_estado_avance, EA.id_estado_avance_char, EA.nombre, EA.descripcion, EA.habilitado, EA.eliminable, EA.eliminado
+        FROM aft.estados_avance EA
+	WHERE EA.id_estado_avance > 0
+    </select>
+    
+    <select id="recuperaEstadoAvancePorIdChar" parameterType="string" resultMap="resultEstadoAvance">
+        SELECT EA.id_estado_avance, EA.id_estado_avance_char, EA.nombre, EA.descripcion, EA.habilitado, EA.eliminable, EA.eliminado
+        FROM aft.estados_avance EA
+	WHERE EA.id_estado_avance_char = #{idEstadoAvanceChar}
+    </select>
+    
+</mapper>

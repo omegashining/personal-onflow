@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="cuForm" class="form-horizontal">
+        <ui:include src="/WEB-INF/xhtml/general/errormessages.xhtml" />
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title text-left">
+                <h:outputLabel value="* Campos requeridos" class="text-danger" />
+            </div>
+
+            <div class="ibox-content">
+                <div class="form-group">
+                    <h:outputLabel for="nombre" value="Nombre :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:inputText id="nombre" value="#{catalogoC.catalogo.descripcion}" size="45" maxlength="45" a:autofocus="true" required="true" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="nombre" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel value="Catálogo :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:outputLabel value="#{catalogoC.catalogo.nombreCatalogo.nombre}" class="control-label text-success" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:outputLabel value=" " />
+                    </div>
+                </div>
+
+                <div class="hr-line-dashed"></div>
+
+                <div class="form-group">
+                    <div class="col-sm-4 col-sm-offset-6">
+                        <h:commandButton value="Guardar" action="#{catalogoC.save}" class="btn btn-success">
+                            <f:ajax render=":cuForm" execute="@form" />
+                        </h:commandButton>
+                        <h:commandButton value="Cancelar" action="cancel" actionListener="#{catalogoC.free}" immediate="true" class="btn btn-danger" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:form>
+    
+</ui:composition>

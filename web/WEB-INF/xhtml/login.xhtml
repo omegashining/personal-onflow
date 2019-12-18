@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <div id="login" class="loginColumns animated fadeInDown">
+        <div class="row">
+            <c:if test="${param.logout == true}">
+                <div class="alert alert-success">
+                    <h:outputText value="#{msg['login.logout']}" />
+                </div>
+            </c:if>
+            
+            <c:if test="${param.confirmation == true}">
+                <div class="alert alert-info">
+                    <h:outputText value="#{msg['login.confirmation']}" />
+                </div>
+            </c:if>
+            
+            <c:if test="${param.confirmed == true}">
+                <div class="alert alert-success">
+                    <h:outputText value="#{msg['login.confirmok']}" />
+                </div>
+            </c:if>
+            
+            <c:if test="${param.confirmed == false}">
+                <div class="alert alert-warning">
+                    <h:outputText value="#{msg['login.confirmbad']}" />
+                </div>
+            </c:if>
+            
+            <c:if test="${param.reset == true}">
+                <div class="alert alert-info">
+                    <h:outputText value="#{msg['login.reset']}" />
+                </div>
+            </c:if>
+            
+            <c:if test="${param.error == true}">
+                <div class="alert alert-danger">
+                    <h:messages globalOnly="true" class="many_errors" />
+                </div>
+            </c:if>
+            
+            <center>
+                <h2 class="font-bold"><h:outputText value="#{msg['login.welcome']}" /></h2>
+            </center>
+            
+            <br />
+
+            <div class="col-md-6">
+                <center>
+                    <br />
+                    
+                    <h:graphicImage class="img-responsive" url="/resources/images/png/logo.png" width="250" />
+                    
+                    <br />
+                    <br />
+                </center>    
+            </div>
+            
+            <div class="col-md-6">
+                <div class="ibox-content">
+                    <h:form id="loginForm" prependId="false" class="m-t">
+                        <div class="form-group">
+                            <h:outputLabel for="j_username" value="#{msg['login.email']}" />  
+                            <h:inputText id="j_username" required="true" onblur="return withwhitespace(this);" class="form-control" style="#{component.valid ? 'border-color: #DDDDDD;' : 'border-color: #FF9999;'}" />
+                        </div>
+
+                        <div class="form-group">
+                            <h:outputLabel for="j_password" value="#{msg['login.password']}" />  
+                            <h:inputSecret id="j_password" required="true" onblur="return withwhitespace(this);" class="form-control" style="#{component.valid ? 'border-color: #DDDDDD;' : 'border-color: #FF9999;'}" />
+                        </div>
+
+                        <div class="form-group">
+                            <h:outputLabel for="j_remember_me" value="#{msg['login.rememberme']}" /> &nbsp;&nbsp;
+                            <h:selectBooleanCheckbox id="j_remember_me" class="i-checks" />
+                        </div>
+
+                        <div class="text-right">
+                            <h:outputLabel value="#{msg['login.required']}" />
+                        </div>
+                        
+                        <!--input type="hidden" name="{_csrf.parameterName}" value="{_csrf.token}" /-->
+
+                        <div style="text-align: right;">
+                            <br/>
+                            <h:commandButton id="login" type="submit" value="#{msg['login.enter']}" action="#{loginController.doLogin}" class="btn btn-primary block full-width m-b" style="width: 100%; font-weight: bold;" />
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="row">
+            <div class="col-md-6">
+                Copyright Lotar <small>© 2016</small>
+            </div>
+            <div class="col-md-6 text-right">
+                <h:form id="langaugeForm">
+                    <h:outputText value="#{msg['app.language']} " />
+                    
+                    <h:commandLink action="#{languageC.change('en_US')}" immediate="true" class="btn btn-white #{languageC.localeCode == 'en_US' ? 'active' : ''}">
+                        <h:graphicImage url="/resources/vendor/inspinia/img/flags/16/United-States.png" /> US
+                    </h:commandLink>
+                    <h:commandLink action="#{languageC.change('es_MX')}" immediate="true" class="btn btn-white #{languageC.localeCode == 'es_MX' ? 'active' : ''}">
+                        <h:graphicImage url="/resources/vendor/inspinia/img/flags/16/Mexico.png" /> MX
+                    </h:commandLink>
+                </h:form>
+            </div>
+        </div>
+    </div>
+    
+</ui:composition>

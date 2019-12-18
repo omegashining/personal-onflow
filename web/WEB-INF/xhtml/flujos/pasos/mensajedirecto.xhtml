@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <div class="form-group">
+        <h:outputLabel for="destinatarios" value="Destinatarios :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <p:pickList id="destinatarios" value="#{mensajeDirectoC.destinatarios}" var="destinatario" converter="#{entityConverter}" itemLabel="#{destinatario.usuario.nombre} #{destinatario.usuario.paterno} #{destinatario.usuario.materno}" itemValue="#{destinatario}" showSourceFilter="true" showTargetFilter="true" effect="bounce" responsive="true" required="true" />
+        </div>
+        <div class="col-sm-2 text-left">
+            <h:message for="destinatarios" class="text-danger" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <h:outputLabel for="mensaje" value="Mensaje :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:inputTextarea id="mensaje" value="#{mensajeDirectoC.mensajeDirecto.mensaje}" cols="80" rows="4" a:maxlength="255" required="true" class="form-control" />
+        </div>
+        <div class="col-sm-2 text-left">
+            <h:message for="mensaje" class="text-danger" />
+        </div>
+    </div>
+
+    <!--p:outputLabel for="respuesta" value="¿Requiere respuesta? :" styleClass="title" />
+    <p:selectBooleanCheckbox id="respuesta" value="{mensajeDirectoC.mensajeDirecto.requiereRespuesta}" />
+    <h:message for="respuesta" styleClass="required" /-->
+    
+    <style>
+        .ui-picklist-list {
+            height:200px !important;
+            min-width:100px !important;
+            width:160px !important;
+        }
+    </style>
+    
+</ui:composition>

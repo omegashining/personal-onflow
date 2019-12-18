@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="cuForm" class="form-horizontal">
+        <ui:include src="/WEB-INF/xhtml/general/errormessages.xhtml" />
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title text-left">
+                <h:outputLabel value="* Campos requeridos" class="text-danger" />
+            </div>
+
+            <div class="ibox-content">
+                <div class="form-group">
+                    <h:outputLabel for="nombre" value="Nombre :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:inputText id="nombre" value="#{flujoC.flujo.nombre}" size="50" maxlength="150" a:autofocus="true" required="true" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="nombre" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="formulario" value="Formulario :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:selectOneMenu id="formulario" value="#{flujoC.flujo.formulario.idFormulario}" validator="#{idIntegerV.validate}" class="form-control m-b" required="true">
+                            <f:selectItem itemLabel="Seleccione una opción" itemValue="0" />
+                            <f:selectItems value="#{formulariosC.list()}" var="formulario" itemLabel="#{formulario.nombre}" itemValue="#{formulario.idFormulario}" />
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="formulario" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="equipo" value="Equipo :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:selectOneMenu id="equipo" value="#{flujoC.flujo.equipo.idEquipo}" validator="#{idIntegerV.validate}" class="form-control m-b" required="true">
+                            <f:selectItem itemLabel="Seleccione una opción" itemValue="0" />
+                            <f:selectItems value="#{equiposC.list()}" var="equipo" itemLabel="#{equipo.nombre}" itemValue="#{equipo.idEquipo}" />
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="equipo" class="text-danger" />
+                    </div>
+                </div>
+                
+                <div class="hr-line-dashed"></div>
+
+                <div class="form-group">
+                    <div class="col-sm-4 col-sm-offset-6">
+                        <h:commandButton value="Guardar" action="#{flujoC.save}" class="btn btn-success">
+                            <f:ajax render=":cuForm" execute="@form" />
+                        </h:commandButton>
+                        <h:commandButton value="Cancelar" action="cancel" actionListener="#{flujoC.free}" immediate="true" class="btn btn-danger" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:form>
+    
+    <br />
+    
+    <div class="row wrapper-content white-bg">
+        <h:form id="fData" prependId="false" rendered="#{flujoC.flujo.idFlujo != 0 ? 'true' : 'false'}">
+            <div class="table-responsive">
+                <h:dataTable id="dtData" var="row" value="#{pasosC.list(flujoC.flujo.idFlujo)}" class="table table-striped table-bordered table-hover">
+                    <h:column>
+                        <f:facet name="header">Id</f:facet>
+                        <h:outputText value="#{row.idPasoFlujo}" />
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Título de la Actividad</f:facet>
+                        <h:commandLink action="#{pasoC.update}" class="text-info">
+                            <h:outputText value="#{row.titulo}" />
+                            <f:setPropertyActionListener value="#{row}" target="#{pasoC.paso}" />
+                            <f:setPropertyActionListener value="#{flujoC.flujo.idFlujo}" target="#{pasoC.idFlujo}" />
+                            <f:setPropertyActionListener value="#{flujoC.flujo.equipo.idEquipo}" target="#{pasoC.idEquipo}" />
+                            <f:setPropertyActionListener value="#{flujoC.flujo.formulario.idFormulario}" target="#{pasoC.idFormulario}" />
+                        </h:commandLink>
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Antecesor</f:facet>
+                        <h:outputText value="#{row.idPasoAntecesor}" rendered="#{row.idPasoAntecesor == 0 ? 'false' : 'true'}" />
+                        <h:outputText value="INICIO" rendered="#{row.idPasoAntecesor == 0 ? 'true' : 'false'}" />
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Sucesor</f:facet>
+                        <h:outputText value="#{row.idPasoSucesor}" rendered="#{row.idPasoSucesor == -1 ? 'false' : 'true'}" />
+                        <h:outputText value="FIN" rendered="#{row.idPasoSucesor == -1 ? 'true' : 'false'}" />
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Tipo de actividad</f:facet>
+                        <h:outputText value="#{row.tipoPaso.nombre}" />
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Responsable</f:facet>
+                        <h:outputText value="#{row.responsable.nombre} #{row.responsable.paterno} #{row.responsable.materno}" />
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Acciones</f:facet>
+                        <h:commandLink action="#{pasoC.update}" title="Editar">
+                            <h:graphicImage url="/resources/images/png/edit.png" />
+                            <f:setPropertyActionListener value="#{row}" target="#{pasoC.paso}" />
+                            <f:setPropertyActionListener value="#{flujoC.flujo.idFlujo}" target="#{pasoC.idFlujo}" />
+                            <f:setPropertyActionListener value="#{flujoC.flujo.equipo.idEquipo}" target="#{pasoC.idEquipo}" />
+                            <f:setPropertyActionListener value="#{flujoC.flujo.formulario.idFormulario}" target="#{pasoC.idFormulario}" />
+                        </h:commandLink>
+                        <h:commandLink title="Eliminar" immediate="true" a:data-toggle="modal" a:data-target="#mDelete">
+                            <h:graphicImage url="/resources/images/png/delete.png" />
+                            <f:ajax render=":fDelete" execute="@form" />
+                        </h:commandLink>
+                    </h:column>
+                </h:dataTable>
+            </div>
+            
+            <div class="text-center">
+                <h:commandButton value="Agregar Actividad" action="#{pasoC.create}" class="btn btn-primary">
+                    <f:setPropertyActionListener value="#{flujoC.flujo.idFlujo}" target="#{pasoC.idFlujo}" />
+                    <f:setPropertyActionListener value="#{flujoC.flujo.equipo.idEquipo}" target="#{pasoC.idEquipo}" />
+                    <f:setPropertyActionListener value="#{flujoC.flujo.formulario.idFormulario}" target="#{pasoC.idFormulario}" />
+                </h:commandButton>
+            </div>
+        </h:form>
+    </div>
+    
+    <ui:include src="eliminarpaso.xhtml" />
+    
+</ui:composition>

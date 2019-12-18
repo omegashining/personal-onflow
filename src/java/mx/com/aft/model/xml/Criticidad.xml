@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.criticidades">
+    
+    <resultMap id="resultCriticidad" type="mx.com.aft.model.entities.Criticidad">
+        <id property="idCriticidad" column="id_criticidad" />
+        <result property="nombre" column="nombre" />
+        <result property="descripcion" column="descripcion" />
+        <result property="diasCompromiso" column="dias_compromiso" />
+        <result property="habilitado" column="habilitado" />
+        <result property="eliminable" column="eliminable" />
+        <result property="eliminado" column="eliminado" />
+    </resultMap>
+    
+    <select id="recuperaCriticidades" parameterType="mx.com.aft.model.entities.Criticidad" resultMap="resultCriticidad">
+        SELECT C.id_criticidad, C.nombre, C.descripcion, C.dias_compromiso, C.habilitado, C.eliminable, C.eliminado
+        FROM aft.criticidad C
+	WHERE C.id_criticidad > 0
+        AND C.eliminado = 0
+    </select>
+    
+    <select id="recuperaCriticidadPorId" parameterType="int" resultMap="resultCriticidad">
+        SELECT C.id_criticidad, C.nombre, C.descripcion, C.dias_compromiso, C.habilitado, C.eliminable, C.eliminado
+        FROM aft.criticidad C
+	WHERE C.id_criticidad = #{id}
+    </select>
+    
+    <insert id="agregaCriticidad" parameterType="mx.com.aft.model.entities.Criticidad" useGeneratedKeys="true" keyProperty="idCriticidad">
+        INSERT INTO aft.criticidad (nombre, descripcion, dias_compromiso, habilitado, eliminable, eliminado)
+        VALUES (#{nombre}, #{descripcion}, #{diasCompromiso}, #{habilitado}, #{eliminable}, #{eliminado})
+    </insert>
+    
+    <update id="actualizaCriticidad" parameterType="mx.com.aft.model.entities.Criticidad">
+        UPDATE aft.criticidad C SET
+        C.nombre = #{nombre}
+        <if test="descripcion != null and descripcion != ''">
+            , C.descripcion = #{descripcion}
+        </if>
+        <if test="diasCompromiso != 0">
+            , C.dias_compromiso = #{diasCompromiso}
+        </if>
+        WHERE C.id_criticidad = #{idCriticidad}
+    </update>
+    
+    <update id="eliminaCriticidad" parameterType="int">
+        UPDATE aft.criticidad C SET
+        C.habilitado = 0
+        , C.eliminado = 1
+        WHERE C.id_criticidad = #{id}
+    </update>
+    
+</mapper>

@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:t="http://myfaces.apache.org/tomahawk"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="cuForm" class="form-horizontal">
+        <ui:include src="/WEB-INF/xhtml/general/errormessages.xhtml" />
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title text-left">
+                <h:outputLabel value="* Campos requeridos" class="text-danger" />
+            </div>
+
+            <div class="ibox-content">
+                <div class="form-group">
+                    <h:outputLabel value="Nombre :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:outputLabel id="nombre" value="#{asignadoC.subflujo.nombre}" a:autofocus="true" class="control-label text-success" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:outputLabel value="" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel value="Fecha de inicio :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:outputLabel value="#{asignadoC.subflujo.fechaInicio}" class="control-label text-success">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" type="date" />
+                        </h:outputLabel>
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:outputLabel value="" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel value="Fase actual :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:outputLabel value="#{asignadoC.subflujo.pasoActual}" class="control-label text-success" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:outputLabel value="" />
+                    </div>
+                </div>
+                
+                <div class="hr-line-dashed"></div>
+
+                <div class="form-group">
+                    <div class="col-sm-4 col-sm-offset-6">
+                        <h:commandButton value="Cancelar" action="cancel" actionListener="#{asignadoC.free}" immediate="true" class="btn btn-danger" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:form>
+    
+    <br />
+    
+    <div class="row wrapper-content white-bg">
+        <h:form id="fData" prependId="false" rendered="#{asignadoC.visualizacion}">
+            <div class="table-responsive">
+                <t:dataTable id="dtData" var="row" value="#{asignadoC.actividades}" class="table table-striped table-bordered table-hover" rowStyleClass="#{row.paso.idPasoFlujo == asignadoC.subflujo.pasoActual ? 'current' : null}">
+                    <t:column>
+                        <f:facet name="header">Id</f:facet>
+                        <h:outputText value="#{row.paso.idPasoFlujo}" />
+                    </t:column>
+
+                    <t:column>
+                        <f:facet name="header">Título de la actividad</f:facet>
+                        <h:outputText value="#{row.paso.titulo}" />
+                    </t:column>
+
+                    <t:column>
+                        <f:facet name="header">Antecesor</f:facet>
+                        <h:outputText value="#{row.paso.idPasoAntecesor}" rendered="#{row.paso.idPasoAntecesor == 0 ? 'false' : 'true'}" />
+                        <h:outputText value="INICIO" rendered="#{row.paso.idPasoAntecesor == 0 ? 'true' : 'false'}" />
+                    </t:column>
+
+                    <t:column>
+                        <f:facet name="header">Sucesor</f:facet>
+                        <h:outputText value="#{row.paso.idPasoSucesor}" rendered="#{row.paso.idPasoSucesor == -1 ? 'false' : 'true'}" />
+                        <h:outputText value="FIN" rendered="#{row.paso.idPasoSucesor == -1 ? 'true' : 'false'}" />
+                    </t:column>
+
+                    <t:column>
+                        <f:facet name="header">Fecha Compromiso</f:facet>
+                        <h:outputText value="#{row.fechaCompromiso}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+                        </h:outputText>
+                    </t:column>
+
+                    <t:column>
+                        <f:facet name="header">Tipo de actividad</f:facet>
+                        <h:outputText value="#{row.paso.tipoPaso.nombre}" />
+                    </t:column>
+
+                    <t:column>
+                        <f:facet name="header">Responsable</f:facet>
+                        <h:outputText value="#{row.paso.responsable.nombre} #{row.paso.responsable.paterno} #{row.paso.responsable.materno}" />
+                    </t:column>
+                </t:dataTable>
+            </div>
+        </h:form>
+    </div>
+    
+</ui:composition>

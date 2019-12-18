@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="cuForm" class="form-horizontal">
+        <ui:include src="/WEB-INF/xhtml/general/errormessages.xhtml" />
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title text-left">
+                <h:outputLabel value="* Campos requeridos" class="text-danger" />
+            </div>
+
+            <div class="ibox-content">
+                <div class="form-group #{usuarioC.creado ? '' : 'hidden'}">
+                    <h:outputLabel for="changepass" value="¿Cambiar contraseña? :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:selectBooleanCheckbox id="changepass" value="#{usuarioC.cambiarContrasena}">
+                            <f:ajax execute="@this" event="change" render="cuForm" />
+                        </h:selectBooleanCheckbox>
+                    </div>
+                </div>
+
+                <div class="hr-line-dashed #{usuarioC.creado ? '' : 'hidden'}"></div>
+
+                <div class="form-group">
+                    <h:outputLabel for="username" value="Usuario :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:inputText id="username" value="#{usuarioC.usuario.username}" validator="#{usernameV.validate}" size="45" maxlength="45" a:autofocus="true" required="true" class="form-control" rendered="#{usuarioC.creado ? 'false' : 'true'}" />
+                        <h:outputLabel id="usernameC" value="#{usuarioC.usuario.username}" class="control-label text-success" rendered="#{!usuarioC.creado ? 'false' : 'true'}" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="username" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group #{(!usuarioC.creado or usuarioC.cambiarContrasena) ? '' : 'hidden'}">
+                    <h:outputLabel for="password" value="Contraseña :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:inputSecret id="password" value="#{usuarioC.usuario.password}" validator="#{passwordV.validate}" size="25" maxlength="20" required="true" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="password" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="nombre" value="Nombre :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:inputText id="nombre" value="#{usuarioC.usuario.nombre}" size="35" maxlength="35" required="true" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="nombre" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="paterno" value="Apellido Paterno :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:inputText id="paterno" value="#{usuarioC.usuario.paterno}" size="25" maxlength="25" required="true" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="paterno" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="materno" value="Apellido Materno :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:inputText id="materno" value="#{usuarioC.usuario.materno}" size="25" maxlength="25" required="true" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="materno" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="correo" value="Correo :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:inputText id="correo" value="#{usuarioC.usuario.correo}" validator="#{emailV.validate}" size="45" maxlength="80" required="true" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="correo" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="rol" value="Rol :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:selectOneMenu id="rol" value="#{usuarioC.usuario.rol.idRol}" validator="#{idIntegerV.validate}" class="form-control m-b">
+                            <f:selectItem itemLabel="Seleccione una opción" itemValue="0" />
+                            <f:selectItems value="#{rolesC.listSistema()}" var="rol" itemLabel="#{rol.nombre}" itemValue="#{rol.idRol}" />
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="rol" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="hr-line-dashed"></div>
+
+                <div class="form-group">
+                    <div class="col-sm-4 col-sm-offset-6">
+                        <h:commandButton value="Guardar" action="#{usuarioC.save}" class="btn btn-success">
+                            <f:ajax render=":cuForm" execute="@form" />
+                        </h:commandButton>
+                        <h:commandButton value="Cancelar" action="cancel" actionListener="#{usuarioC.free}" class="btn btn-danger" immediate="true" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:form>
+    
+</ui:composition>

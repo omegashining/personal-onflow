@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.pasos">
+    
+    <resultMap id="resultPaso" type="mx.com.aft.model.entities.Paso">
+        <id property="idPaso" column="id_paso" />
+        <result property="idPasoFlujo" column="id_paso_flujo" />
+        <result property="titulo" column="titulo" />
+        <result property="idPasoAntecesor" column="id_paso_antecesor" />
+        <result property="idPasoSucesor" column="id_paso_sucesor" />
+        <result property="eliminado" column="eliminado" />
+        
+        <result property="flujo.idFlujo" column="id_flujo" />
+        
+        <result property="tipoPaso.idTipoPaso" column="id_tipo_paso" />
+        <result property="tipoPaso.idTipoPasoChar" column="id_tipo_paso_char" />
+        <result property="tipoPaso.nombre" column="nombre_tipo_paso" />
+        <result property="tipoPaso.descripcion" column="descripcion_tipo_paso" />
+        <result property="tipoPaso.habilitado" column="habilitado_tipo_paso" />
+        <result property="tipoPaso.eliminable" column="eliminable_tipo_paso" />
+        <result property="tipoPaso.eliminado" column="eliminado_tipo_paso" />
+        
+        <result property="responsable.idUsuario" column="id_usuario" />
+        <result property="responsable.nombre" column="nombre_usuario" />
+        <result property="responsable.paterno" column="paterno" />
+        <result property="responsable.materno" column="materno" />
+        <result property="responsable.correo" column="correo" />
+        <result property="responsable.habilitado" column="habilitado_usuario" />
+        <result property="responsable.eliminable" column="eliminable_usuario" />
+        <result property="responsable.eliminado" column="eliminado_usuario" />
+        <result property="responsable.rol.idRol" column="id_rol" />
+        <result property="responsable.rol.idRolChar" column="id_rol_char" />
+        <result property="responsable.rol.nombre" column="nombre_rol" />
+        <result property="responsable.rol.descripcion" column="descripcion_rol" />
+        <result property="responsable.rol.prioridad" column="prioridad" />
+        <result property="responsable.rol.habilitado" column="habilitado_rol" />
+        <result property="responsable.rol.eliminable" column="eliminable_rol" />
+        <result property="responsable.rol.eliminado" column="eliminado_rol" />
+    </resultMap>
+    
+    <select id="recuperaPasosPorFlujo" parameterType="int" resultMap="resultPaso">
+        SELECT DISTINCT P.id_paso, P.id_paso_flujo, P.titulo, P.id_paso_antecesor, P.id_paso_sucesor, P.eliminado,
+               TP.id_tipo_paso, TP.id_tipo_paso_char, TP.nombre nombre_tipo_paso,
+               U.id_usuario, U.nombre nombre_usuario, U.paterno, U.materno, U.correo,
+               R.id_rol, R.id_rol_char, R.nombre nombre_rol, R.descripcion descripcion_rol, R.prioridad,
+               F.id_flujo
+        FROM aft.pasos P
+           LEFT JOIN aft.tipos_paso TP
+              ON TP.id_tipo_paso = P.tipos_paso_id_tipo_paso
+           LEFT JOIN aft.usuarios U
+              ON U.id_usuario = P.usuarios_id_usuario
+           LEFT JOIN aft.equipos_usuarios EU
+              ON EU.usuarios_id_usuario = U.id_usuario
+           LEFT JOIN aft.roles R
+              ON R.id_rol = EU.roles_id_rol
+           LEFT JOIN aft.flujos F
+              ON F.id_flujo = P.flujos_id_flujo
+	WHERE F.id_flujo = #{id}
+        AND P.eliminado = 0
+        ORDER BY id_paso_flujo
+    </select>
+    
+    <select id="recuperaIdsPasoPorFlujo" parameterType="int" resultMap="resultPaso">
+        SELECT DISTINCT P.id_paso, P.id_paso_flujo
+        FROM aft.pasos P
+           LEFT JOIN aft.flujos F
+              ON F.id_flujo = P.flujos_id_flujo
+	WHERE F.id_flujo = #{id}
+        AND P.eliminado = 0
+        ORDER BY id_paso_flujo
+    </select>
+    
+    <select id="recuperaPasoPorId" parameterType="int" resultMap="resultPaso">
+        SELECT DISTINCT P.id_paso, P.id_paso_flujo, P.titulo, P.id_paso_antecesor, P.id_paso_sucesor, P.eliminado,
+               TP.id_tipo_paso,
+               U.id_usuario,
+               R.id_rol,
+               F.id_flujo
+        FROM aft.pasos P
+           LEFT JOIN aft.tipos_paso TP
+              ON TP.id_tipo_paso = P.tipos_paso_id_tipo_paso
+           LEFT JOIN aft.usuarios U
+              ON U.id_usuario = P.usuarios_id_usuario
+           LEFT JOIN aft.equipos_usuarios EU
+              ON EU.usuarios_id_usuario = U.id_usuario
+           LEFT JOIN aft.roles R
+              ON R.id_rol = EU.roles_id_rol
+           LEFT JOIN aft.flujos F
+              ON F.id_flujo = P.flujos_id_flujo
+	WHERE P.id_paso = #{id}
+    </select>
+    
+    <insert id="agregaPaso" parameterType="mx.com.aft.model.entities.Paso" useGeneratedKeys="true" keyProperty="idPaso">
+        INSERT INTO aft.pasos (id_paso_flujo, titulo, id_paso_antecesor, id_paso_sucesor, eliminado, flujos_id_flujo, usuarios_id_usuario, tipos_paso_id_tipo_paso)
+        VALUES (#{idPasoFlujo}, #{titulo}, #{idPasoAntecesor}, #{idPasoSucesor}, #{eliminado}, #{flujo.idFlujo}, #{responsable.idUsuario}, #{tipoPaso.idTipoPaso})
+    </insert>
+    
+    <update id="actualizaPaso" parameterType="mx.com.aft.model.entities.Paso">
+        UPDATE aft.pasos P SET
+        P.flujos_id_flujo = #{flujo.idFlujo}
+        <if test="idPasoFlujo != 0">
+            , P.id_paso_flujo = #{idPasoFlujo}
+        </if>
+        <if test="titulo != null and titulo != ''">
+            , P.titulo = #{titulo}
+        </if>
+        <if test="idPasoAntecesor != 0">
+            , P.id_paso_antecesor = #{idPasoAntecesor}
+        </if>
+        <if test="idPasoSucesor != 0">
+            , P.id_paso_sucesor = #{idPasoSucesor}
+        </if>
+        <if test="responsable.idUsuario != 0">
+            , P.usuarios_id_usuario = #{responsable.idUsuario}
+        </if>
+        <if test="tipoPaso.idTipoPaso != 0">
+            , P.tipos_paso_id_tipo_paso = #{tipoPaso.idTipoPaso}
+        </if>
+        WHERE P.id_paso = #{idPaso}
+    </update>
+    
+    <update id="eliminaPaso" parameterType="int">
+        UPDATE aft.pasos P SET
+        P.eliminado = 1
+        WHERE P.id_paso = #{id}
+    </update>
+    
+    <select id="cuentaPasosPorFlujo" parameterType="int" resultType="int">
+        SELECT COUNT(DISTINCT P.id_paso, P.id_paso_flujo)
+        FROM aft.pasos P
+           LEFT JOIN aft.flujos F
+              ON F.id_flujo = P.flujos_id_flujo
+	WHERE F.id_flujo = #{id}
+        AND P.eliminado = 0
+    </select>
+    
+</mapper>

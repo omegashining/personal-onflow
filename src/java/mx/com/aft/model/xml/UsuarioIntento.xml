@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.usuariosintentos">
+    
+    <resultMap id="resultUsuarioIntento" type="mx.com.aft.model.entities.UsuarioIntento">
+        <id property="idUsuarioIntento" column="id_usuario_intento" />
+        <result property="username" column="username" />
+        <result property="intentos" column="intentos" />
+        <result property="modificado" column="modificado" />
+    </resultMap>
+    
+    <select id="recuperaUsuarioIntentoPorUsername" parameterType="String" resultMap="resultUsuarioIntento ">
+        SELECT UI.id_usuario_intento, UI.username, UI.intentos, UI.modificado
+        FROM aft.usuarios_intentos UI
+	WHERE UI.username = #{id}
+    </select>
+    
+    <insert id="agregaUsuarioIntento" parameterType="mx.com.aft.model.entities.UsuarioIntento" useGeneratedKeys="true" keyProperty="idUsuarioIntento">
+        INSERT INTO aft.usuarios_intentos (username, intentos, modificado)
+        VALUES (#{username}, #{intentos}, #{modificado})
+    </insert>
+    
+    <update id="actualizaUsuarioIntento" parameterType="mx.com.aft.model.entities.UsuarioIntento">
+        UPDATE aft.usuarios_intentos UI SET
+        UI.intentos = #{intentos}
+        , UI.modificado = #{modificado}
+        WHERE UI.id_usuario_intento = #{idUsuarioIntento}
+    </update>
+    
+    <delete id="eliminaUsuarioIntento" parameterType="String">
+        DELETE FROM aft.usuarios_intentos
+        WHERE username = #{id}
+    </delete>
+    
+</mapper>

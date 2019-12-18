@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.permisos">
+    
+    <resultMap id="resultPermiso" type="mx.com.aft.model.entities.Permiso">
+        <id property="idPermiso" column="id_permiso" />
+        <result property="idPermisoChar" column="id_permiso_char" />
+        <result property="nombre" column="nombre" />
+        <result property="descripcion" column="descripcion" />
+        <result property="habilitado" column="habilitado" />
+        <result property="eliminable" column="eliminable" />
+        <result property="eliminado" column="eliminado" />
+    </resultMap>
+    
+    
+    
+</mapper>

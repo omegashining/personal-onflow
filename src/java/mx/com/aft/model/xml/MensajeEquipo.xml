@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.mensajesequipo">
+    
+    <resultMap id="resultMensajeEquipo" type="mx.com.aft.model.entities.MensajeEquipo">
+        <id property="idMensajeEquipo" column="id_mensaje_equipo" />
+        <result property="mensaje" column="mensaje" />
+        
+        <result property="paso.idPaso" column="id_paso" />
+    </resultMap>
+    
+    <select id="recuperaMensajeEquipoPorPaso" parameterType="int" resultMap="resultMensajeEquipo">
+        SELECT ME.id_mensaje_equipo, ME.mensaje, ME.pasos_id_paso id_paso
+        FROM aft.mensajes_equipo ME
+	WHERE ME.pasos_id_paso = #{id}
+    </select>
+    
+    <insert id="agregaMensajeEquipo" parameterType="mx.com.aft.model.entities.MensajeEquipo" useGeneratedKeys="true" keyProperty="idMensajeEquipo">
+        INSERT INTO aft.mensajes_equipo (mensaje, pasos_id_paso)
+        VALUES (#{mensaje}, #{paso.idPaso})
+    </insert>
+    
+    <update id="actualizaMensajeEquipo" parameterType="mx.com.aft.model.entities.MensajeEquipo">
+        UPDATE aft.mensajes_equipo ME SET
+        ME.pasos_id_paso = #{paso.idPaso}
+        <if test="mensaje != null and mensaje != ''">
+            , ME.mensaje = #{mensaje}
+        </if>
+        WHERE ME.id_mensaje_equipo = #{idMensajeEquipo}
+    </update>
+    
+</mapper>

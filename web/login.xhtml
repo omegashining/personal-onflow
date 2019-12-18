@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <h:head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        
+        <title>
+            <h:outputText value="#{msg['app.login']}" />
+        </title>
+        
+        <link rel="shortcut icon" href="#{request.contextPath}/resources/images/ico/iron_man.ico" />
+
+        <link href="#{request.contextPath}/resources/vendor/inspinia/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="#{request.contextPath}/resources/vendor/inspinia/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+        <!-- Toastr style -->
+        <link href="#{request.contextPath}/resources/vendor/inspinia/css/plugins/toastr/toastr.min.css" rel="stylesheet" />
+
+        <!-- Gritter -->
+        <link href="#{request.contextPath}/resources/vendor/inspinia/js/plugins/gritter/jquery.gritter.css" rel="stylesheet" />
+        
+        <!-- Tables -->
+        <link href="#{request.contextPath}/resources/vendor/inspinia/css/plugins/dataTables/datatables.min.css" rel="stylesheet" />
+        
+        <!-- Checkboxes -->
+        <link href="#{request.contextPath}/resources/vendor/inspinia/css/plugins/iCheck/custom.css" rel="stylesheet" />
+        <link href="#{request.contextPath}/resources/vendor/inspinia/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet" />
+
+        <link href="#{request.contextPath}/resources/vendor/inspinia/css/animate.css" rel="stylesheet" />
+        <link href="#{request.contextPath}/resources/vendor/inspinia/css/style.css" rel="stylesheet" />
+    </h:head>
+    <h:body class="gray-bg">
+        <f:view locale="#{languageC.locale}"/>
+        
+        <ui:insert name="login">
+            <ui:include src="/WEB-INF/xhtml/login.xhtml" />
+        </ui:insert>
+        
+        <ui:insert name="scripts">
+            <ui:include src="/WEB-INF/facelets/inspinia/scripts.xhtml" />
+        </ui:insert>
+    </h:body>
+</html>

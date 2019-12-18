@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.flujos">
+    
+    <resultMap id="resultFlujo" type="mx.com.aft.model.entities.Flujo">
+        <id property="idFlujo" column="id_flujo" />
+        <result property="nombre" column="nombre" />
+        <result property="iniciado" column="iniciado" />
+        <result property="eliminado" column="eliminado" />
+        
+        <result property="equipo.idEquipo" column="id_equipo" />
+        <result property="equipo.nombre" column="nombre_equipo" />
+        <result property="equipo.habilitado" column="habilitado_equipo" />
+        <result property="equipo.eliminable" column="eliminable_equipo" />
+        <result property="equipo.eliminado" column="eliminado_equipo" />
+        
+        <result property="formulario.idFormulario" column="id_formulario" />
+        <result property="formulario.nombre" column="nombre_formulario" />
+        <result property="formulario.archivo" column="archivo" />
+        <result property="formulario.habilitado" column="habilitado_formulario" />
+        <result property="formulario.eliminable" column="eliminable_formulario" />
+        <result property="formulario.eliminado" column="eliminado_formulario" />
+        <result property="formulario.documento.idDocumento" column="id_documento" />
+        <result property="formulario.documento.nombre" column="nombre_documento" />
+    </resultMap>
+    
+    <select id="recuperaFlujos" parameterType="mx.com.aft.model.entities.Flujo" resultMap="resultFlujo">
+        SELECT F.id_flujo, F.nombre, F.iniciado, F.eliminado,
+               E.id_equipo, E.nombre nombre_equipo,
+               FO.id_formulario, FO.nombre nombre_formulario
+        FROM aft.flujos F
+           LEFT JOIN aft.equipos E
+              ON E.id_equipo = F.equipos_id_equipo
+           LEFT JOIN aft.formularios FO
+              ON FO.id_formulario = F.formularios_id_formulario
+        WHERE F.id_flujo >= 0
+        AND F.eliminado = 0
+        <if test="iniciado != 0">
+        AND F.iniciado = #{iniciado}
+        </if>
+    </select>
+    
+    <select id="recuperaFlujoPorId" parameterType="mx.com.aft.model.entities.Flujo" resultMap="resultFlujo">
+        SELECT F.id_flujo, F.nombre, F.iniciado, F.eliminado,
+               E.id_equipo, E.nombre nombre_equipo,
+               FO.id_formulario, FO.nombre nombre_formulario,
+               D.id_documento
+        FROM aft.flujos F
+           LEFT JOIN aft.equipos E
+              ON E.id_equipo = F.equipos_id_equipo
+           LEFT JOIN aft.formularios FO
+              ON FO.id_formulario = F.formularios_id_formulario
+           LEFT JOIN aft.documentos D
+              ON D.id_documento = FO.documentos_id_documento
+        WHERE F.id_flujo = #{id}
+    </select>
+    
+    <select id="recuperaFlujoPorSubflujo" parameterType="int" resultMap="resultFlujo">
+        SELECT F.id_flujo, F.nombre, F.iniciado, F.eliminado,
+               E.id_equipo, E.nombre nombre_equipo,
+               FO.id_formulario, FO.nombre nombre_formulario,
+               D.id_documento
+        FROM aft.flujos F
+           LEFT JOIN aft.equipos E
+              ON E.id_equipo = F.equipos_id_equipo
+           LEFT JOIN aft.formularios FO
+              ON FO.id_formulario = F.formularios_id_formulario
+           LEFT JOIN aft.documentos D
+              ON D.id_documento = FO.documentos_id_documento
+           LEFT JOIN aft.subflujos S
+              ON S.flujos_id_flujo = F.id_flujo
+        WHERE S.id_subflujo = #{id}
+    </select>
+    
+    <insert id="agregaFlujo" parameterType="mx.com.aft.model.entities.Flujo" useGeneratedKeys="true" keyProperty="idFlujo">
+        INSERT INTO aft.flujos (nombre, iniciado, eliminado, equipos_id_equipo, formularios_id_formulario)
+        VALUES (#{nombre}, #{iniciado}, #{eliminado}, #{equipo.idEquipo}, #{formulario.idFormulario})
+    </insert>
+    
+    <update id="actualizaFlujo" parameterType="mx.com.aft.model.entities.Flujo">
+        UPDATE aft.flujos F SET
+        F.nombre = #{nombre}
+        <if test="equipo.idEquipo != 0">
+            , F.equipos_id_equipo = #{equipo.idEquipo}
+        </if>
+        <if test="formulario.idFormulario != 0">
+            , F.formularios_id_formulario = #{formulario.idFormulario}
+        </if>
+        WHERE F.id_flujo = #{idFlujo}
+    </update>
+    
+    <update id="eliminaFlujo" parameterType="int">
+        UPDATE aft.flujos F SET
+        F.eliminado = 1
+        WHERE F.id_flujo = #{idFlujo}
+    </update>
+    
+    <update id="iniciarFlujo" parameterType="int">
+        UPDATE aft.flujos F SET
+        F.iniciado = 1
+        WHERE F.id_flujo = #{idFlujo}
+    </update>
+    
+</mapper>

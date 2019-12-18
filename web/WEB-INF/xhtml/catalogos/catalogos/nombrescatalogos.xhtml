@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <div class="row wrapper-content white-bg">
+        <h:form id="fData" prependId="false">
+            <div class="table-responsive">
+                <h:dataTable id="dtData" var="row" value="#{nombresCatalogosC.list()}" class="table table-striped table-bordered table-hover">
+                    <h:column>
+                        <f:facet name="header">Id</f:facet>
+                        <h:outputText value="#{row.idNombreCatalogo}" />
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Nombre</f:facet>
+                        <h:outputText value="#{row.nombre}" />
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Descripción</f:facet>
+                        <h:outputText value="#{row.descripcion}" />
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Acciones</f:facet>
+                        <h:commandLink action="#{nombreCatalogoC.update}" title="Editar">
+                            <h:graphicImage url="/resources/images/png/edit.png" />
+                            <f:setPropertyActionListener value="#{row}" target="#{nombreCatalogoC.nombreCatalogo}" />
+                        </h:commandLink>
+                        <h:commandLink title="Eliminar" immediate="true" rendered="#{row.eliminable}" a:data-toggle="modal" a:data-target="#mDelete">
+                            <h:graphicImage url="/resources/images/png/delete.png" />
+                            <f:setPropertyActionListener value="#{row}" target="#{nombreCatalogoC.nombreCatalogo}" />
+                            <f:ajax render=":fDelete" execute="@form" />
+                        </h:commandLink>
+                    </h:column>
+                </h:dataTable>
+            </div>
+            
+            <div class="text-center">
+                <h:commandButton value="Agregar Catálogo" action="#{nombreCatalogoC.create}" class="btn btn-primary">
+                    <f:ajax execute="@form" />
+                </h:commandButton>
+            </div>
+        </h:form>
+    </div>
+    
+    <ui:include src="eliminarnombrecatalogo.xhtml" />
+    
+</ui:composition>

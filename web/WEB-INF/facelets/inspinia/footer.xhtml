@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <div class="footer">
+        <div class="pull-right">
+            <h:form id="langaugeForm">
+                <h:outputText value="#{msg['app.language']} " />
+
+                <h:commandLink action="#{languageC.change('en_US')}" immediate="true" class="btn btn-white #{languageC.localeCode == 'en_US' ? 'active' : ''}">
+                    <h:graphicImage url="/resources/vendor/inspinia/img/flags/16/United-States.png" /> US
+                </h:commandLink>
+                <h:commandLink action="#{languageC.change('es_MX')}" immediate="true" class="btn btn-white #{languageC.localeCode == 'es_MX' ? 'active' : ''}">
+                    <h:graphicImage url="/resources/vendor/inspinia/img/flags/16/Mexico.png" /> MX
+                </h:commandLink>
+            </h:form>
+        </div>
+        <div>
+            <strong>Copyright</strong> Lotar &copy; 2016
+        </div>
+    </div>
+
+</ui:composition>

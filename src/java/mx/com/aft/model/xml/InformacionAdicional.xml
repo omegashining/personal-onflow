@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.informacionadicional">
+    
+    <resultMap id="resultInformacionAdicional" type="mx.com.aft.model.entities.InformacionAdicional">
+        <id property="idInformacionAdicional" column="id_informacion_adicional" />
+        <result property="solicitud" column="solicitud" />
+        <result property="respuesta" column="respuesta" />
+        
+        <result property="tarea.idTarea" column="id_tarea" />
+    </resultMap>
+    
+    
+    
+</mapper>

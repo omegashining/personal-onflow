@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.mensajesdirectos">
+    
+    <resultMap id="resultMensajeDirecto" type="mx.com.aft.model.entities.MensajeDirecto">
+        <id property="idMensajeDirecto" column="id_mensaje_directo" />
+        <result property="mensaje" column="mensaje" />
+        <result property="requiereRespuesta" column="requiere_respuesta" />
+        
+        <result property="paso.idPaso" column="id_paso" />
+    </resultMap>
+    
+    <select id="recuperaMensajeDirectoPorPaso" parameterType="int" resultMap="resultMensajeDirecto">
+        SELECT MD.id_mensaje_directo, MD.mensaje, MD.requiere_respuesta, MD.pasos_id_paso id_paso
+        FROM aft.mensajes_directos MD
+	WHERE MD.pasos_id_paso = #{id}
+    </select>
+    
+    <insert id="agregaMensajeDirecto" parameterType="mx.com.aft.model.entities.MensajeDirecto" useGeneratedKeys="true" keyProperty="idMensajeDirecto">
+        INSERT INTO aft.mensajes_directos (mensaje, requiere_respuesta, pasos_id_paso)
+        VALUES (#{mensaje}, #{requiereRespuesta}, #{paso.idPaso})
+    </insert>
+    
+    <update id="actualizaMensajeDirecto" parameterType="mx.com.aft.model.entities.MensajeDirecto">
+        UPDATE aft.mensajes_directos MD SET
+        MD.requiere_respuesta = #{requiereRespuesta}
+        , MD.pasos_id_paso = #{paso.idPaso}
+        <if test="mensaje != null and mensaje != ''">
+            , MD.mensaje = #{mensaje}
+        </if>
+        WHERE MD.id_mensaje_directo = #{idMensajeDirecto}
+    </update>
+    
+</mapper>

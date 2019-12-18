@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.decisiones">
+    
+    <resultMap id="resultDecision" type="mx.com.aft.model.entities.Decision">
+        <id property="idDecision" column="id_decision" />
+        <result property="comentarios" column="comentarios" />
+        <result property="aprobado" column="aprobado" />
+        
+        <result property="paso.idPaso" column="id_paso" />
+    </resultMap>
+    
+    <select id="recuperaDecisionPorPaso" parameterType="int" resultMap="resultDecision">
+        SELECT D.id_decision, D.comentarios, D.aprobado, D.pasos_id_paso id_paso
+        FROM aft.decisiones D
+	WHERE D.pasos_id_paso = #{id}
+    </select>
+    
+    <insert id="agregaDecision" parameterType="mx.com.aft.model.entities.Decision" useGeneratedKeys="true" keyProperty="idDecision">
+        INSERT INTO aft.decisiones (comentarios, aprobado, pasos_id_paso)
+        VALUES (#{comentarios}, #{aprobado}, #{paso.idPaso})
+    </insert>
+    
+    <update id="actualizaDecision" parameterType="mx.com.aft.model.entities.Decision">
+        UPDATE aft.decisiones D SET
+        D.aprobado = #{aprobado}
+        , D.pasos_id_paso = #{paso.idPaso}
+        <if test="comentarios != null and comentarios != ''">
+            , D.comentarios = #{comentarios}
+        </if>
+        WHERE D.id_decision = #{idDecision}
+    </update>
+    
+</mapper>

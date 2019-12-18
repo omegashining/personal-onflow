@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <div class="form-group">
+        <h:outputLabel for="tema" value="Tema :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:inputText id="tema" value="#{reunionC.reunion.tema}" size="55" maxlength="120" required="true" class="form-control" />
+        </div>
+        <div class="col-sm-2 text-left">
+            <h:message for="tema" class="text-danger" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <h:outputLabel for="ubicacion" value="Punto de reunión :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:inputText id="ubicacion" value="#{reunionC.reunion.puntoReunion}" size="55" maxlength="120" required="true" class="form-control" />
+        </div>
+        <div class="col-sm-2 text-left">
+            <h:message for="ubicacion" class="text-danger" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <h:outputLabel for="fechaHora" value="Fecha y Hora propuesta :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:inputText id="fechaHora" value="#{reunionC.reunion.fechaHora}" size="20" maxlength="20" converterMessage="La fecha o el formato de fecha es incorrecto. El formato de fecha es: dd/MM/yyyy HH:mm." required="true" class="form-control">
+                <f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm"/>
+            </h:inputText>
+        </div>
+        <div class="col-sm-2 text-left">
+            <h:message for="fechaHora" class="text-danger" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <h:outputLabel for="descripcionReunion" value="Descripción :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:inputTextarea id="descripcionReunion" value="#{reunionC.reunion.descripcion}" cols="80" rows="4" a:maxlength="255" required="true" class="form-control" />
+        </div>
+        <div class="col-sm-2 text-left">
+            <h:message for="descripcionReunion" class="text-danger" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <h:outputLabel for="criticidadReunion" value="Criticidad :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:selectOneMenu id="criticidadReunion" value="#{reunionC.reunion.criticidad.idCriticidad}" validator="#{idIntegerV.validate}" class="form-control m-b">
+                <f:selectItem itemLabel="Seleccione una opción" itemValue="0" />
+                <f:selectItems value="#{criticidadesC.list()}" var="criticidad" itemLabel="#{criticidad.nombre}" itemValue="#{criticidad.idCriticidad}" />
+            </h:selectOneMenu>
+        </div>
+        <div class="col-sm-2 text-left">
+            <h:message for="criticidadReunion" class="text-danger" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <h:outputLabel for="numero" value="Conferencia :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:inputText id="numero" value="#{reunionC.reunion.numeroConferencia}" size="45" maxlength="45" required="true" class="form-control" />
+        </div>
+        <div class="col-sm-2 text-left">
+            <h:message for="numero" class="text-danger" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <h:outputLabel for="clave" value="Clave conferencia :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:inputText id="clave" value="#{reunionC.reunion.clave}" size="45" maxlength="45" required="true" class="form-control" />
+        </div>
+        <div class="col-sm-2 text-left">
+            <h:message for="clave" class="text-danger" />
+        </div>
+    </div>
+    
+</ui:composition>

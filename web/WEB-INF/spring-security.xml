@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+                                 http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+    <global-method-security secured-annotations="enabled" />
+    
+    <http entry-point-ref="loginAuthenticationEntryPoint" use-expressions="true" access-denied-page="/pages/error/denied.jsf">
+        <intercept-url pattern="/pages/private/**" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/pages/public/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
+        
+        <custom-filter ref="securityAuthenticationFilter" position="FORM_LOGIN_FILTER" />
+        <custom-filter ref="concurrencyFilter" position="CONCURRENT_SESSION_FILTER" />
+        
+        <session-management session-authentication-strategy-ref="sas"/>
+        
+        <logout
+            invalidate-session="true" 
+            logout-success-url="/login.jsf?logout=true"
+            delete-cookies="JSESSIONID" />
+    </http>
+    
+    
+    
+    <beans:bean id="loginAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+        <beans:constructor-arg name="loginFormUrl" value="/login.jsf"/>
+    </beans:bean>
+    
+    
+    
+    <beans:bean id="securityAuthenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+        <beans:property name="authenticationManager" ref="authenticationManager"/>
+        <beans:property name="authenticationSuccessHandler" ref="loginAuthenticationSuccessHandler"/>
+        <beans:property name="authenticationFailureHandler" ref="loginAuthenticationFailureHandler"/>
+        <beans:property name="filterProcessesUrl" value="/j_spring_security_check"/>
+        <beans:property name="rememberMeServices" ref="rememberMeServices"/>
+        <beans:property name="sessionAuthenticationStrategy" ref="sas" />
+    </beans:bean>
+    
+    <beans:bean id="loginAuthenticationSuccessHandler" class="mx.com.aft.security.CustomAuthenticationSuccessHandler" />
+    <beans:bean id="loginAuthenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+        <beans:constructor-arg name="defaultFailureUrl" value="/login.jsf?error=true"/>
+    </beans:bean>
+    
+    <beans:bean id="rememberMeServices" class="org.springframework.security.web.authentication.NullRememberMeServices"/>
+    
+    
+    
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider ref="customDaoAuthenticationProvider" />
+    </authentication-manager>
+    
+    
+    
+    <beans:bean id="concurrencyFilter" class="org.springframework.security.web.session.ConcurrentSessionFilter">
+        <beans:property name="sessionRegistry" ref="sessionRegistry" />
+        <beans:property name="expiredUrl" value="/login.jsf" />
+    </beans:bean>
+    
+    <beans:bean id="sas" class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+        <beans:constructor-arg name="sessionRegistry" ref="sessionRegistry" />
+        <beans:property name="maximumSessions" value="1" />
+    </beans:bean>
+    
+    <beans:bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
+    
+</beans:beans>

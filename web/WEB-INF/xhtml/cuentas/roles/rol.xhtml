@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="cuForm" class="form-horizontal">
+        <ui:include src="/WEB-INF/xhtml/general/errormessages.xhtml" />
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title text-left">
+                <h:outputLabel value="* Campos requeridos" class="text-danger" />
+            </div>
+
+            <div class="ibox-content">
+                <div class="form-group">
+                    <h:outputLabel for="idChar" value="Identificador :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:inputText id="idChar" value="#{rolC.rol.idRolChar}" validator="#{idRolCharV.validate}" size="15" maxlength="15" a:autofocus="true" required="true" class="form-control" rendered="#{!rolC.creado ? 'true' : 'false'}" />
+                        <h:outputLabel id="idCharC" value="#{rolC.rol.idRolChar}" class="control-label text-success" rendered="#{rolC.creado ? 'true' : 'false'}" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="idChar" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="nombre" value="Nombre :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:inputText id="nombre" value="#{rolC.rol.nombre}" size="30" maxlength="30" required="true" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="nombre" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="descripcion" value="Descripción :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:inputTextarea id="descripcion" value="#{rolC.rol.descripcion}" rows="3" cols="60" a:maxlength="120" required="true" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="descripcion" class="text-danger" />
+                    </div>
+                </div>
+
+                <!--div class="form-group">
+                    <h:outputLabel for="prioridad" value="Prioridad :"  class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:inputText id="prioridad" value="{rolC.rol.prioridad}" onkeypress="return onlynumbers(event, this, false);" size="8" maxlength="8" class="form-control" required="true" />
+                    </div>
+                    <div class="col-sm-2">
+                        <h:message for="prioridad" class="text-danger" />
+                    </div>
+                </div-->
+
+                <div class="hr-line-dashed"></div>
+
+                <div class="form-group">
+                    <div class="col-sm-4 col-sm-offset-6">
+                        <h:commandButton value="Guardar" action="#{rolC.save}" class="btn btn-success">
+                            <f:ajax render=":cuForm" execute="@form" />
+                        </h:commandButton>
+                        <h:commandButton value="Cancelar" action="cancel" actionListener="#{rolC.free}" immediate="true" class="btn btn-danger" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:form>
+
+</ui:composition>

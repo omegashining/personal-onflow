@@ -1,0 +1,615 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="2.0" 
+    xmlns="http://java.sun.com/xml/ns/javaee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+    
+    <application>
+        <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+        <locale-config>
+            <default-locale>en_US</default-locale>
+        </locale-config>
+        <resource-bundle>
+            <base-name>messages</base-name>
+            <var>msg</var>
+        </resource-bundle>
+    </application>
+    
+    <protected-views>
+        <url-pattern>/pages/public/asignados/asignados.xhtml</url-pattern>
+    </protected-views>
+    
+    <lifecycle>
+        <phase-listener>mx.com.aft.controller.LoginController</phase-listener>
+    </lifecycle>
+    
+    <!-- MENU -->
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>home</from-outcome>
+            <to-view-id>/pages/public/asignados/asignados.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>report</from-outcome>
+            <to-view-id>/pages/public/report.jsf</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <navigation-case>
+            <from-action>#{usuariosC.see}</from-action>
+            <from-outcome>see</from-outcome>
+            <to-view-id>/pages/private/cuentas/usuarios/usuarios.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{rolesC.see}</from-action>
+            <from-outcome>see</from-outcome>
+            <to-view-id>/pages/private/cuentas/roles/roles.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{criticidadesC.see}</from-action>
+            <from-outcome>see</from-outcome>
+            <to-view-id>/pages/private/catalogos/criticidades/criticidades.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{nombresCatalogosC.see}</from-action>
+            <from-outcome>see</from-outcome>
+            <to-view-id>/pages/private/catalogos/catalogos/nombrescatalogos.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{equiposC.see}</from-action>
+            <from-outcome>see</from-outcome>
+            <to-view-id>/pages/private/equipos/equipos.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{flujosC.see}</from-action>
+            <from-outcome>see</from-outcome>
+            <to-view-id>/pages/private/flujos/flujos.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{formulariosC.see}</from-action>
+            <from-outcome>see</from-outcome>
+            <to-view-id>/pages/private/flujos/formularios/formularios.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{subflujosC.see}</from-action>
+            <from-outcome>see</from-outcome>
+            <to-view-id>/pages/private/subflujos/subflujos.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{asignadosC.see}</from-action>
+            <from-outcome>see</from-outcome>
+            <to-view-id>/pages/public/asignados/asignados.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- FLUJOS -->
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/flujos/flujos.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{flujoC.create}</from-action>
+            <from-outcome>create</from-outcome>
+            <to-view-id>/pages/private/flujos/flujo.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{flujoC.update}</from-action>
+            <from-outcome>update</from-outcome>
+            <to-view-id>/pages/private/flujos/flujo.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{flujosC.start}</from-action>
+            <from-outcome>start</from-outcome>
+            <to-view-id>/pages/private/flujos/flujos.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{flujosC.delete}</from-action>
+            <from-outcome>delete</from-outcome>
+            <to-view-id>/pages/private/flujos/flujos.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/flujos/flujo.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{flujoC.save}</from-action>
+            <from-outcome>save</from-outcome>
+            <to-view-id>/pages/private/flujos/flujos.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{pasoC.create}</from-action>
+            <from-outcome>create</from-outcome>
+            <to-view-id>/pages/private/flujos/pasos/paso.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{pasoC.update}</from-action>
+            <from-outcome>update</from-outcome>
+            <to-view-id>/pages/private/flujos/pasos/paso.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{pasoC.delete}</from-action>
+            <from-outcome>delete</from-outcome>
+            <to-view-id>/pages/private/flujos/flujo.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>cancel</from-outcome>
+            <to-view-id>/pages/private/flujos/flujos.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/flujos/pasos/paso.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{pasoC.save}</from-action>
+            <from-outcome>save</from-outcome>
+            <to-view-id>/pages/private/flujos/flujo.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>cancel</from-outcome>
+            <to-view-id>/pages/private/flujos/flujo.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- FORMULARIOS -->
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/flujos/formularios/formularios.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{formularioC.create}</from-action>
+            <from-outcome>create</from-outcome>
+            <to-view-id>/pages/private/flujos/formularios/formulario.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{formularioC.update}</from-action>
+            <from-outcome>update</from-outcome>
+            <to-view-id>/pages/private/flujos/formularios/formulario.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{formulariosC.delete}</from-action>
+            <from-outcome>delete</from-outcome>
+            <to-view-id>/pages/private/flujos/formularios/formularios.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/flujos/formularios/formulario.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{formularioC.save}</from-action>
+            <from-outcome>save</from-outcome>
+            <to-view-id>/pages/private/flujos/formularios/formularios.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{preguntaC.create}</from-action>
+            <from-outcome>create</from-outcome>
+            <to-view-id>/pages/private/flujos/formularios/preguntas/pregunta.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{preguntaC.update}</from-action>
+            <from-outcome>update</from-outcome>
+            <to-view-id>/pages/private/flujos/formularios/preguntas/pregunta.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{preguntasC.delete}</from-action>
+            <from-outcome>delete</from-outcome>
+            <to-view-id>/pages/private/flujos/formularios/formulario.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>cancel</from-outcome>
+            <to-view-id>/pages/private/flujos/formularios/formularios.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/flujos/formularios/preguntas/pregunta.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{preguntaC.save}</from-action>
+            <from-outcome>save</from-outcome>
+            <to-view-id>/pages/private/flujos/formularios/formulario.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>cancel</from-outcome>
+            <to-view-id>/pages/private/flujos/formularios/formulario.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- SUBFLUJOS -->
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/subflujos/subflujos.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{subflujoC.create}</from-action>
+            <from-outcome>create</from-outcome>
+            <to-view-id>/pages/private/subflujos/subflujo.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{subflujoC.see}</from-action>
+            <from-outcome>see</from-outcome>
+            <to-view-id>/pages/private/subflujos/subflujo.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{subflujosC.delete}</from-action>
+            <from-outcome>delete</from-outcome>
+            <to-view-id>/pages/private/subflujos/subflujos.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/subflujos/subflujo.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{subflujoC.save}</from-action>
+            <from-outcome>save</from-outcome>
+            <to-view-id>/pages/private/subflujos/subflujos.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>cancel</from-outcome>
+            <to-view-id>/pages/private/subflujos/subflujos.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- ASIGNADOS -->
+    
+    <navigation-rule>
+        <from-view-id>/pages/public/asignados/asignados.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{asignadoC.see}</from-action>
+            <from-outcome>see</from-outcome>
+            <to-view-id>/pages/public/asignados/asignado.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        
+        <navigation-case>
+            <from-action>#{asignadoC.activity}</from-action>
+            <from-outcome>activity</from-outcome>
+            <to-view-id>/pages/public/asignados/actividad/actividad.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>documents</from-outcome>
+            <to-view-id>/pages/public/asignados/documentos.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/pages/public/asignados/asignado.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-outcome>cancel</from-outcome>
+            <to-view-id>/pages/public/asignados/asignados.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/pages/public/asignados/actividad/actividad.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{asignadoC.save}</from-action>
+            <from-outcome>save</from-outcome>
+            <to-view-id>/pages/public/asignados/asignados.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>#{asignadoC.fileUpload}</from-outcome>
+            <from-outcome>upload</from-outcome>
+            <to-view-id>/pages/public/asignados/actividad/actividad.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>cancel</from-outcome>
+            <to-view-id>/pages/public/asignados/asignados.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/pages/public/asignados/documentos.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-outcome>cancel</from-outcome>
+            <to-view-id>/pages/public/asignados/asignados.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- USUARIOS -->
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/cuentas/usuarios/usuarios.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{usuarioC.create}</from-action>
+            <from-outcome>create</from-outcome>
+            <to-view-id>/pages/private/cuentas/usuarios/usuario.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{usuarioC.update}</from-action>
+            <from-outcome>update</from-outcome>
+            <to-view-id>/pages/private/cuentas/usuarios/usuario.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{usuariosC.destroySession}</from-action>
+            <from-outcome>destroySession</from-outcome>
+            <to-view-id>/pages/private/cuentas/usuarios/usuarios.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{usuariosC.unlock}</from-action>
+            <from-outcome>unlock</from-outcome>
+            <to-view-id>/pages/private/cuentas/usuarios/usuarios.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/cuentas/usuarios/usuario.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{usuarioC.save}</from-action>
+            <from-outcome>save</from-outcome>
+            <to-view-id>/pages/private/cuentas/usuarios/usuarios.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>cancel</from-outcome>
+            <to-view-id>/pages/private/cuentas/usuarios/usuarios.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- ROLES -->
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/cuentas/roles/roles.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{rolC.create}</from-action>
+            <from-outcome>create</from-outcome>
+            <to-view-id>/pages/private/cuentas/roles/rol.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{rolC.update}</from-action>
+            <from-outcome>update</from-outcome>
+            <to-view-id>/pages/private/cuentas/roles/rol.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{rolesC.delete}</from-action>
+            <from-outcome>delete</from-outcome>
+            <to-view-id>/pages/private/cuentas/roles/roles.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/cuentas/roles/rol.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{rolC.save}</from-action>
+            <from-outcome>save</from-outcome>
+            <to-view-id>/pages/private/cuentas/roles/roles.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>cancel</from-outcome>
+            <to-view-id>/pages/private/cuentas/roles/roles.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- ROLES -->
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/catalogos/criticidades/criticidades.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{criticidadC.create}</from-action>
+            <from-outcome>create</from-outcome>
+            <to-view-id>/pages/private/catalogos/criticidades/criticidad.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{criticidadC.update}</from-action>
+            <from-outcome>update</from-outcome>
+            <to-view-id>/pages/private/catalogos/criticidades/criticidad.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{criticidadesC.delete}</from-action>
+            <from-outcome>delete</from-outcome>
+            <to-view-id>/pages/private/catalogos/criticidades/criticidades.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/catalogos/criticidades/criticidad.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{criticidadC.save}</from-action>
+            <from-outcome>save</from-outcome>
+            <to-view-id>/pages/private/catalogos/criticidades/criticidades.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>cancel</from-outcome>
+            <to-view-id>/pages/private/catalogos/criticidades/criticidades.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- EQUIPOS -->
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/equipos/equipos.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{equipoC.create}</from-action>
+            <from-outcome>create</from-outcome>
+            <to-view-id>/pages/private/equipos/equipo.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{equipoC.update}</from-action>
+            <from-outcome>update</from-outcome>
+            <to-view-id>/pages/private/equipos/equipo.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{equiposC.delete}</from-action>
+            <from-outcome>delete</from-outcome>
+            <to-view-id>/pages/private/equipos/equipos.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/equipos/equipo.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{equipoC.save}</from-action>
+            <from-outcome>save</from-outcome>
+            <to-view-id>/pages/private/equipos/equipos.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>cancel</from-outcome>
+            <to-view-id>/pages/private/equipos/equipos.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- CATÁLOGOS -->
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/catalogos/catalogos/nombrescatalogos.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{nombreCatalogoC.create}</from-action>
+            <from-outcome>create</from-outcome>
+            <to-view-id>/pages/private/catalogos/catalogos/nombrecatalogo.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{nombreCatalogoC.update}</from-action>
+            <from-outcome>update</from-outcome>
+            <to-view-id>/pages/private/catalogos/catalogos/nombrecatalogo.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{nombresCatalogosC.delete}</from-action>
+            <from-outcome>delete</from-outcome>
+            <to-view-id>/pages/private/catalogos/catalogos/nombrescatalogos.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/catalogos/catalogos/nombrecatalogo.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{nombreCatalogoC.save}</from-action>
+            <from-outcome>save</from-outcome>
+            <to-view-id>/pages/private/catalogos/catalogos/nombrescatalogos.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{catalogoC.create}</from-action>
+            <from-outcome>create</from-outcome>
+            <to-view-id>/pages/private/catalogos/catalogos/catalogo/catalogo.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{catalogoC.update}</from-action>
+            <from-outcome>update</from-outcome>
+            <to-view-id>/pages/private/catalogos/catalogos/catalogo/catalogo.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{catalogosC.delete}</from-action>
+            <from-outcome>delete</from-outcome>
+            <to-view-id>/pages/private/catalogos/catalogos/nombrecatalogo.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>cancel</from-outcome>
+            <to-view-id>/pages/private/catalogos/catalogos/nombrescatalogos.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/pages/private/catalogos/catalogos/catalogo/catalogo.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-action>#{catalogoC.save}</from-action>
+            <from-outcome>save</from-outcome>
+            <to-view-id>//pages/private/catalogos/catalogos/nombrecatalogo.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>cancel</from-outcome>
+            <to-view-id>/pages/private/catalogos/catalogos/nombrecatalogo.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <factory>
+        <render-kit-factory>org.omnifaces.renderkit.Html5RenderKitFactory</render-kit-factory>
+    </factory>
+    
+    <factory>
+        <exception-handler-factory>org.omnifaces.exceptionhandler.FullAjaxExceptionHandlerFactory</exception-handler-factory>
+    </factory>
+    
+</faces-config>

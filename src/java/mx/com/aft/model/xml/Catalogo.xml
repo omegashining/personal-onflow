@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.catalogos">
+    
+    <resultMap id="resultCatalogo" type="mx.com.aft.model.entities.Catalogo">
+        <id property="idCatalogo" column="id_catalogo" />
+        <result property="descripcion" column="descripcion" />
+        <result property="habilitado" column="habilitado" />
+        <result property="eliminable" column="eliminable" />
+        <result property="eliminado" column="eliminado" />
+        
+        <result property="nombreCatalogo.idNombreCatalogo" column="id_nombre_catalogo" />
+        <result property="nombreCatalogo.nombre" column="nombre" />
+        <result property="nombreCatalogo.descripcion" column="descripcion_nombre_catalogo" />
+        <result property="nombreCatalogo.habilitado" column="habilitado_nombre_catalogo" />
+        <result property="nombreCatalogo.eliminable" column="eliminable_nombre_catalogo" />
+        <result property="nombreCatalogo.eliminado" column="eliminado_nombre_catalogo" />
+    </resultMap>
+    
+    <select id="recuperaCatalogos" parameterType="mx.com.aft.model.entities.Catalogo" resultMap="resultCatalogo">
+        SELECT C.id_catalogo, C.descripcion, C.habilitado, C.eliminable, C.eliminado,
+               NC.id_nombre_catalogo, NC.nombre, NC.descripcion descripcion_nombre_catalogo, NC.habilitado habilitado_nombre_catalogo, NC.eliminable eliminable_nombre_catalogo, NC.eliminado eliminado_nombre_catalogo
+        FROM aft.catalogos C
+           LEFT JOIN aft.nombres_catalogos NC
+              ON NC.id_nombre_catalogo = C.nombres_catalogos_id_nombre_catalogo
+	WHERE C.id_catalogo > 0
+    </select>
+    
+    <select id="recuperaCatalogosPorNombreCatalogo" parameterType="int" resultMap="resultCatalogo">
+        SELECT C.id_catalogo, C.descripcion, C.habilitado, C.eliminable, C.eliminado,
+               NC.id_nombre_catalogo, NC.nombre, NC.descripcion descripcion_nombre_catalogo, NC.habilitado habilitado_nombre_catalogo, NC.eliminable eliminable_nombre_catalogo, NC.eliminado eliminado_nombre_catalogo
+        FROM aft.catalogos C
+           LEFT JOIN aft.nombres_catalogos NC
+              ON NC.id_nombre_catalogo = C.nombres_catalogos_id_nombre_catalogo
+	WHERE NC.id_nombre_catalogo = #{id}
+        AND C.eliminado = 0
+    </select>
+    
+    <select id="recuperaCatalogoPorId" parameterType="int" resultMap="resultCatalogo">
+        SELECT C.id_catalogo, C.descripcion, C.habilitado, C.eliminable, C.eliminado,
+               NC.id_nombre_catalogo
+        FROM aft.catalogos C
+           LEFT JOIN aft.nombres_catalogos NC
+              ON NC.id_nombre_catalogo = C.nombres_catalogos_id_nombre_catalogo
+	WHERE C.id_catalogo = #{id}
+    </select>
+    
+    <insert id="agregaCatalogo" parameterType="mx.com.aft.model.entities.Catalogo" useGeneratedKeys="true" keyProperty="idCatalogo">
+        INSERT INTO aft.catalogos (descripcion, habilitado, eliminable, eliminado, nombres_catalogos_id_nombre_catalogo)
+        VALUES (#{descripcion}, #{habilitado}, #{eliminable}, #{eliminado}, #{nombreCatalogo.idNombreCatalogo})
+    </insert>
+    
+    <update id="actualizaCatalogo" parameterType="mx.com.aft.model.entities.Catalogo">
+        UPDATE aft.catalogos C SET
+        C.descripcion = #{descripcion}
+        <if test="nombreCatalogo.idNombreCatalogo != 0">
+            , C.nombres_catalogos_id_nombre_catalogo = #{nombreCatalogo.idNombreCatalogo}
+        </if>
+        WHERE C.id_catalogo = #{idCatalogo}
+    </update>
+    
+    <update id="eliminaCatalogo" parameterType="int">
+        UPDATE aft.catalogos C SET
+        C.habilitado = 0
+        , C.eliminado = 1
+        WHERE C.id_catalogo = #{id}
+    </update>
+    
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="cuForm" class="form-horizontal">
+        <ui:include src="/WEB-INF/xhtml/general/errormessages.xhtml" />
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title text-left">
+                <h:outputLabel value="* Campos requeridos" class="text-danger" />
+            </div>
+
+            <div class="ibox-content">
+                <div class="form-group">
+                    <h:outputLabel for="nombre" value="Nombre :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:inputText id="nombre" value="#{nombreCatalogoC.nombreCatalogo.nombre}" size="30" maxlength="30" a:autofocus="true" required="true" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="nombre" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="descripcion" value="Descripción :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:inputTextarea id="descripcion" value="#{nombreCatalogoC.nombreCatalogo.descripcion}" rows="3" cols="60" a:maxlength="120" required="true" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="descripcion" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="hr-line-dashed"></div>
+
+                <div class="form-group">
+                    <div class="col-sm-4 col-sm-offset-6">
+                        <h:commandButton value="Guardar" action="#{nombreCatalogoC.save}" class="btn btn-success">
+                            <f:ajax render=":cuForm" execute="@form" />
+                        </h:commandButton>
+                        <h:commandButton value="Cancelar" action="cancel" actionListener="#{nombreCatalogoC.free}" immediate="true" class="btn btn-danger" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:form>
+    
+    <br />
+    
+    <div class="row wrapper-content white-bg">
+        <h:form id="fData" prependId="false" rendered="#{nombreCatalogoC.nombreCatalogo.idNombreCatalogo != 0 ? 'true' : 'false'}">
+            <div class="table-responsive">
+                <h:dataTable id="dtData" var="row" value="#{catalogosC.list(nombreCatalogoC.nombreCatalogo.idNombreCatalogo)}" class="table table-striped table-bordered table-hover">
+                    <h:column>
+                        <f:facet name="header">Id</f:facet>
+                        <h:outputText value="#{row.idCatalogo}" />
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Nombre</f:facet>
+                        <h:outputText value="#{row.descripcion}" />
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Acciones</f:facet>
+                        <h:commandLink action="#{catalogoC.update}" title="Editar">
+                            <h:graphicImage url="/resources/images/png/edit.png" />
+                            <f:setPropertyActionListener value="#{row}" target="#{catalogoC.catalogo}" />
+                        </h:commandLink>
+                        <h:commandLink title="Eliminar" immediate="true" rendered="#{row.eliminable}" a:data-toggle="modal" a:data-target="#mDelete">
+                            <h:graphicImage url="/resources/images/png/delete.png" />
+                            <f:setPropertyActionListener value="#{row}" target="#{catalogoC.catalogo}" />
+                            <f:ajax render=":fDelete" execute="@form" />
+                        </h:commandLink>
+                    </h:column>
+                </h:dataTable>
+            </div>
+            
+            <div class="text-center">
+                <h:commandButton value="Agregar Catálogo" action="#{catalogoC.create}" class="btn btn-primary">
+                    <f:ajax execute="@form" />
+                </h:commandButton>
+            </div>
+        </h:form>
+    </div>
+    
+    <ui:include src="eliminarcatalogo.xhtml" />
+    
+</ui:composition>

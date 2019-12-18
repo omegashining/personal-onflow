@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <div class="form-group">
+        <h:outputLabel value="Tema :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:outputLabel value="#{actividadC.paso.reunion.tema}" class="control-label text-success" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <h:outputLabel value="Punto de reunión :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:outputLabel value="#{actividadC.paso.reunion.puntoReunion}" class="control-label text-success" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <h:outputLabel value="Fecha y Hora propuesta :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:outputLabel value="#{actividadC.paso.reunion.fechaHora}" class="control-label text-success">
+                <f:convertDateTime pattern="dd/MM/yyyy" type="date" />
+            </h:outputLabel>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <h:outputLabel value="Descripción :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:outputLabel value="#{actividadC.paso.reunion.descripcion}" class="control-label text-success" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <h:outputLabel value="Criticidad :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:outputLabel value="#{actividadC.paso.reunion.criticidad.nombre}" class="control-label text-success" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <h:outputLabel value="Conferencia :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:outputLabel value="#{actividadC.paso.reunion.numeroConferencia}" class="control-label text-success" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <h:outputLabel value="Clave conferencia :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:outputLabel value="#{actividadC.paso.reunion.clave}" class="control-label text-success" />
+        </div>
+    </div>
+    
+</ui:composition>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.subflujos">
+    
+    <resultMap id="resultSubflujo" type="mx.com.aft.model.entities.Subflujo">
+        <id property="idSubflujo" column="id_subflujo" />
+        <result property="nombre" column="nombre" />
+        <result property="json" column="json" />
+        <result property="fechaInicio" column="fecha_inicio" />
+        <result property="fechaCompromiso" column="fecha_compromiso" />
+        <result property="pasoActual" column="paso_actual" />
+        <result property="totalPasos" column="total_pasos" />
+        <result property="eliminado" column="eliminado" />
+        
+        <result property="estadoAvance.idEstadoAvance" column="id_estado_avance" />
+        <result property="estadoAvance.idEstadoAvanceChar" column="id_estado_avance_char" />
+        <result property="estadoAvance.nombre" column="nombre_estado_avance" />
+        <result property="estadoAvance.descripcion" column="descripcion" />
+        <result property="estadoAvance.habilitado" column="habilitado_estado_avance" />
+        <result property="estadoAvance.eliminable" column="eliminable_estado_avance" />
+        <result property="estadoAvance.eliminado" column="eliminado_estado_avance" />
+        
+        <result property="flujo.idFlujo" column="id_flujo" />
+        <result property="flujo.equipo.idEquipo" column="id_equipo" />
+        
+        <result property="responsable.idUsuario" column="id_usuario" />
+        <result property="responsable.nombre" column="nombre_usuario" />
+        <result property="responsable.paterno" column="paterno" />
+        <result property="responsable.materno" column="materno" />
+        
+        <result property="documento.idDocumento" column="id_documento" />
+    </resultMap>
+    
+    <select id="recuperaSubflujos" parameterType="mx.com.aft.model.entities.Subflujo" resultMap="resultSubflujo">
+        SELECT DISTINCT S.id_subflujo, S.nombre, S.json, S.fecha_inicio, S.fecha_compromiso, S.paso_actual, S.total_pasos, S.eliminado,
+               EA.id_estado_avance, EA.id_estado_avance_char, EA.nombre nombre_estado_avance, EA.descripcion, EA.habilitado habilitado_estado_avance, EA.eliminable eliminable_estado_avance, EA.eliminado eliminado_estado_avance,
+               F.id_flujo,
+               U.id_usuario, U.nombre nombre_usuario, U.paterno, U.materno,
+               D.id_documento,
+               EU.equipos_id_equipo id_equipo
+        FROM aft.subflujos S
+           LEFT JOIN aft.estados_avance EA
+              ON EA.id_estado_avance = S.estados_avance_id_estado_avance
+           LEFT JOIN aft.flujos F
+              ON F.id_flujo = S.flujos_id_flujo
+           LEFT JOIN aft.usuarios U
+              ON U.id_usuario = S.usuarios_id_usuario
+           LEFT JOIN aft.documentos D
+              ON D.id_documento = S.documentos_id_documento
+           LEFT JOIN aft.equipos E
+              ON E.id_equipo = F.equipos_id_equipo
+           LEFT JOIN aft.equipos_usuarios EU
+              ON EU.equipos_id_equipo = E.id_equipo
+	WHERE S.id_subflujo > 0
+        AND S.eliminado = 0
+    </select>
+    
+    <select id="recuperaSubflujosPorUsuario" parameterType="int" resultMap="resultSubflujo">
+        SELECT DISTINCT S.id_subflujo, S.nombre, S.json, S.fecha_inicio, S.fecha_compromiso, S.paso_actual, S.total_pasos, S.eliminado,
+               EA.id_estado_avance, EA.id_estado_avance_char, EA.nombre nombre_estado_avance, EA.descripcion, EA.habilitado habilitado_estado_avance, EA.eliminable eliminable_estado_avance, EA.eliminado eliminado_estado_avance,
+               F.id_flujo,
+               U.id_usuario, U.nombre nombre_usuario, U.paterno, U.materno,
+               D.id_documento,
+               EU.usuarios_id_usuario,
+               EU.equipos_id_equipo id_equipo
+        FROM aft.subflujos S
+           LEFT JOIN aft.estados_avance EA
+              ON EA.id_estado_avance = S.estados_avance_id_estado_avance
+           LEFT JOIN aft.flujos F
+              ON F.id_flujo = S.flujos_id_flujo
+           LEFT JOIN aft.usuarios U
+              ON U.id_usuario = S.usuarios_id_usuario
+           LEFT JOIN aft.documentos D
+              ON D.id_documento = S.documentos_id_documento
+           LEFT JOIN aft.equipos E
+              ON E.id_equipo = F.equipos_id_equipo
+           LEFT JOIN aft.equipos_usuarios EU
+              ON EU.equipos_id_equipo = E.id_equipo
+	WHERE EU.usuarios_id_usuario = #{id}
+        AND S.eliminado = 0
+    </select>
+    
+    <select id="recuperaSubflujosPorFlujo" parameterType="int" resultMap="resultSubflujo">
+        SELECT DISTINCT S.id_subflujo, S.nombre, S.json, S.fecha_inicio, S.fecha_compromiso, S.paso_actual, S.total_pasos, S.eliminado,
+               EA.id_estado_avance, EA.id_estado_avance_char, EA.nombre nombre_estado_avance, EA.descripcion, EA.habilitado habilitado_estado_avance, EA.eliminable eliminable_estado_avance, EA.eliminado eliminado_estado_avance,
+               F.id_flujo,
+               U.id_usuario, U.nombre nombre_usuario, U.paterno, U.materno,
+               D.id_documento
+        FROM aft.subflujos S
+           LEFT JOIN aft.estados_avance EA
+              ON EA.id_estado_avance = S.estados_avance_id_estado_avance
+           LEFT JOIN aft.flujos F
+              ON F.id_flujo = S.flujos_id_flujo
+           LEFT JOIN aft.usuarios U
+              ON U.id_usuario = S.usuarios_id_usuario
+           LEFT JOIN aft.documentos D
+              ON D.id_documento = S.documentos_id_documento
+	WHERE F.id_flujo = #{id}
+        AND S.eliminado = 0
+    </select>
+    
+    <select id="recuperaSubflujoPorId" parameterType="int" resultMap="resultSubflujo">
+        SELECT DISTINCT S.id_subflujo, S.nombre, S.json, S.fecha_inicio, S.fecha_compromiso, S.paso_actual, S.total_pasos, S.eliminado,
+               EA.id_estado_avance,
+               F.id_flujo,
+               U.id_usuario, U.nombre nombre_usuario, U.paterno, U.materno,
+               D.id_documento
+        FROM aft.subflujos S
+           LEFT JOIN aft.estados_avance EA
+              ON EA.id_estado_avance = S.estados_avance_id_estado_avance
+           LEFT JOIN aft.flujos F
+              ON F.id_flujo = S.flujos_id_flujo
+           LEFT JOIN aft.usuarios U
+              ON U.id_usuario = S.usuarios_id_usuario
+           LEFT JOIN aft.documentos D
+              ON D.id_documento = S.documentos_id_documento
+	WHERE S.id_subflujo = #{id}
+    </select>
+    
+    <insert id="agregaSubflujo" parameterType="mx.com.aft.model.entities.Subflujo" useGeneratedKeys="true" keyProperty="idSubflujo">
+        INSERT INTO aft.subflujos (nombre, json, fecha_inicio, fecha_compromiso, paso_actual, total_pasos, eliminado, flujos_id_flujo, estados_avance_id_estado_avance, usuarios_id_usuario, documentos_id_documento)
+        VALUES (#{nombre}, #{json}, #{fechaInicio}, #{fechaCompromiso}, #{pasoActual}, #{totalPasos}, #{eliminado}, #{flujo.idFlujo}, #{estadoAvance.idEstadoAvance}, #{responsable.idUsuario}, #{documento.idDocumento})
+    </insert>
+    
+    <update id="actualizaSubflujo" parameterType="mx.com.aft.model.entities.Subflujo">
+        UPDATE aft.subflujos S SET
+        S.flujos_id_flujo = #{flujo.idFlujo}
+        <if test="nombre != null and nombre != ''">
+            , S.nombre = #{nombre}
+        </if>
+        <if test="json != null and json != ''">
+            , S.json= #{json}
+        </if>
+        <if test="fechaInicio != null">
+            , S.fecha_inicio = #{fechaInicio}
+        </if>
+        <if test="fechaCompromiso != null">
+            , S.fecha_compromiso = #{fechaCompromiso}
+        </if>
+        <if test="pasoActual != 0">
+            , S.paso_actual = #{pasoActual}
+        </if>
+        <if test="totalPasos != 0">
+            , S.total_pasos = #{totalPasos}
+        </if>
+        <if test="estadoAvance.idEstadoAvance != 0">
+            , S.estados_avance_id_estado_avance = #{estadoAvance.idEstadoAvance}
+        </if>
+        <if test="responsable.idUsuario != 0">
+            , S.usuarios_id_usuario = #{responsable.idUsuario}
+        </if>
+        WHERE S.id_subflujo = #{idSubflujo}
+    </update>
+    
+    <update id="eliminaSubflujo" parameterType="int">
+        UPDATE aft.subflujos S SET
+        S.eliminado = 1
+        WHERE S.id_subflujo = #{id}
+    </update>
+    
+</mapper>

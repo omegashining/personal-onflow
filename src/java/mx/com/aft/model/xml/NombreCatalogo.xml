@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.nombrescatalogos">
+    
+    <resultMap id="resultNombreCatalogo" type="mx.com.aft.model.entities.NombreCatalogo">
+        <id property="idNombreCatalogo" column="id_nombre_catalogo" />
+        <result property="nombre" column="nombre" />
+        <result property="descripcion" column="descripcion" />
+        <result property="habilitado" column="habilitado" />
+        <result property="eliminable" column="eliminable" />
+        <result property="eliminado" column="eliminado" />
+    </resultMap>
+    
+    <select id="recuperaNombresCatalogos" parameterType="mx.com.aft.model.entities.NombreCatalogo" resultMap="resultNombreCatalogo">
+        SELECT NC.id_nombre_catalogo, NC.nombre, NC.descripcion, NC.habilitado, NC.eliminable, NC.eliminado
+        FROM aft.nombres_catalogos NC
+	WHERE NC.id_nombre_catalogo > 1
+        AND NC.eliminado = 0
+    </select>
+    
+    <select id="recuperaNombreCatalogoPorId" parameterType="int" resultMap="resultNombreCatalogo">
+        SELECT NC.id_nombre_catalogo, NC.nombre, NC.descripcion, NC.habilitado, NC.eliminable, NC.eliminado
+        FROM aft.nombres_catalogos NC
+	WHERE NC.id_nombre_catalogo = #{id}
+    </select>
+    
+    <insert id="agregaNombreCatalogo" parameterType="mx.com.aft.model.entities.NombreCatalogo" useGeneratedKeys="true" keyProperty="idNombreCatalogo">
+        INSERT INTO aft.nombres_catalogos (nombre, descripcion, habilitado, eliminable, eliminado)
+        VALUES (#{nombre}, #{descripcion}, #{habilitado}, #{eliminable}, #{eliminado})
+    </insert>
+    
+    <update id="actualizaNombreCatalogo" parameterType="mx.com.aft.model.entities.NombreCatalogo">
+        UPDATE aft.nombres_catalogos NC SET
+        NC.nombre = #{nombre}
+        <if test="descripcion != null and descripcion != ''">
+            , NC.descripcion = #{descripcion}
+        </if>
+        WHERE NC.id_nombre_catalogo = #{idNombreCatalogo}
+    </update>
+    
+    <update id="eliminaNombreCatalogo" parameterType="int">
+        UPDATE aft.nombres_catalogos NC SET
+        NC.habilitado = 0
+        , NC.eliminado = 1
+        WHERE NC.id_nombre_catalogo = #{id}
+    </update>
+    
+</mapper>

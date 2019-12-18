@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.preguntas">
+    
+    <resultMap id="resultPregunta" type="mx.com.aft.model.entities.Pregunta">
+        <id property="idPregunta" column="id_pregunta" />
+        <result property="pregunta" column="pregunta" />
+        <result property="variable" column="variable" />
+        <result property="asignada" column="asignada" />
+        <result property="eliminado" column="eliminado" />
+        
+        <result property="formulario.idFormulario" column="id_formulario" />
+        <result property="formulario.nombre" column="nombre" />
+        <result property="formulario.archivo" column="archivo" />
+        <result property="formulario.habilitado" column="habilitado" />
+        <result property="formulario.eliminable" column="eliminable" />
+        <result property="formulario.eliminado" column="eliminado" />
+        
+        <result property="tipoPregunta.idTipoPregunta" column="id_tipo_pregunta" />
+        <result property="tipoPregunta.idTipoPreguntaChar" column="id_tipo_pregunta_char" />
+        <result property="tipoPregunta.nombre" column="nombre_tipo_pregunta" />
+        <result property="tipoPregunta.descripcion" column="descripcion" />
+        <result property="tipoPregunta.habilitado" column="habilitado_tipo_pregunta" />
+        <result property="tipoPregunta.eliminable" column="eliminable_tipo_pregunta" />
+        <result property="tipoPregunta.eliminado" column="eliminado_tipo_pregunta" />
+        
+        <result property="nombreCatalogo.idNombreCatalogo" column="id_nombre_catalogo" />
+    </resultMap>
+    
+    <select id="recuperaPreguntasPorFormulario" parameterType="int" resultMap="resultPregunta">
+        SELECT DISTINCT P.id_pregunta, P.pregunta, P.variable, P.asignada, P.eliminado,
+               F.id_formulario,
+               TP.id_tipo_pregunta, TP.id_tipo_pregunta_char, TP.nombre nombre_tipo_pregunta, TP.descripcion, TP.habilitado habilitado_tipo_pregunta, TP.eliminable eliminable_tipo_pregunta, TP.eliminado eliminado_tipo_pregunta,
+               NC.id_nombre_catalogo
+        FROM aft.preguntas P
+           LEFT JOIN aft.formularios F
+              ON F.id_formulario = P.formularios_id_formulario
+           LEFT JOIN aft.tipos_pregunta TP
+              ON TP.id_tipo_pregunta = P.tipos_pregunta_id_tipo_pregunta
+           LEFT JOIN aft.nombres_catalogos NC
+              ON NC.id_nombre_catalogo = P.nombres_catalogos_id_nombre_catalogo
+	WHERE F.id_formulario = #{id}
+        AND P.eliminado = 0
+    </select>
+    
+    <select id="recuperaPreguntaPorId" parameterType="int" resultMap="resultPregunta">
+        SELECT P.id_pregunta, P.pregunta, P.variable, P.asignada, P.eliminado,
+               F.id_formulario,
+               TP.id_tipo_pregunta, TP.id_tipo_pregunta_char,
+               NC.id_nombre_catalogo
+        FROM aft.preguntas P
+           LEFT JOIN aft.formularios F
+              ON F.id_formulario = P.formularios_id_formulario
+           LEFT JOIN aft.tipos_pregunta TP
+              ON TP.id_tipo_pregunta = P.tipos_pregunta_id_tipo_pregunta
+           LEFT JOIN aft.nombres_catalogos NC
+              ON NC.id_nombre_catalogo = P.nombres_catalogos_id_nombre_catalogo
+	WHERE P.id_pregunta = #{id}
+    </select>
+    
+    <insert id="agregaPregunta" parameterType="mx.com.aft.model.entities.Pregunta" useGeneratedKeys="true" keyProperty="idPregunta">
+        INSERT INTO aft.preguntas (pregunta, variable, asignada, eliminado, formularios_id_formulario, tipos_pregunta_id_tipo_pregunta, nombres_catalogos_id_nombre_catalogo)
+        VALUES (#{pregunta}, #{variable}, #{asignada}, #{eliminado}, #{formulario.idFormulario}, #{tipoPregunta.idTipoPregunta}, #{nombreCatalogo.idNombreCatalogo})
+    </insert>
+    
+    <update id="actualizaPregunta" parameterType="mx.com.aft.model.entities.Pregunta">
+        UPDATE aft.preguntas P SET
+        P.pregunta = #{pregunta}
+        , P.asignada = #{asignada}
+        <if test="variable != null and variable != ''">
+            , P.variable = #{variable}
+        </if>
+        <if test="formulario.idFormulario != 0">
+            , P.formularios_id_formulario = #{formulario.idFormulario}
+        </if>
+        <if test="tipoPregunta.idTipoPregunta != 0">
+            , P.tipos_pregunta_id_tipo_pregunta = #{tipoPregunta.idTipoPregunta}
+        </if>
+        <if test="nombreCatalogo.idNombreCatalogo != 0">
+            , P.nombres_catalogos_id_nombre_catalogo = #{nombreCatalogo.idNombreCatalogo}
+        </if>
+        WHERE P.id_pregunta = #{idPregunta}
+    </update>
+    
+    <update id="eliminaPregunta" parameterType="int">
+        UPDATE aft.preguntas P SET
+        P.eliminado = 1
+        WHERE P.id_pregunta = #{id}
+    </update>
+    
+</mapper>

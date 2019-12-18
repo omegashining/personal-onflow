@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="cuForm" class="form-horizontal">
+        <ui:include src="/WEB-INF/xhtml/general/errormessages.xhtml" />
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title text-left">
+                <h:outputLabel value="* Campos requeridos" class="text-danger" />
+            </div>
+
+            <div class="ibox-content">
+                <div class="form-group">
+                    <h:outputLabel for="tipoPaso" value="Tipo de Paso :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:selectOneMenu id="tipoPaso" value="#{pasoC.paso.tipoPaso.idTipoPaso}" validator="#{idIntegerV.validate}" a:autofocus="true" class="form-control m-b" rendered="#{!pasoC.creado}">
+                            <f:selectItem itemLabel="Seleccione una opción" itemValue="0" />
+                            <f:selectItems value="#{tiposPasoC.list()}" var="tipoPaso" itemLabel="#{tipoPaso.nombre}" itemValue="#{tipoPaso.idTipoPaso}" />
+                            <f:ajax execute="@this" event="change" listener="#{pasoC.cambiarTipoPaso}" render="opTypes responsable" />
+                        </h:selectOneMenu>
+                        <h:outputLabel id="tipoPasoC" value="#{pasoC.paso.tipoPaso.nombre}" class="control-label text-success" rendered="#{pasoC.creado}" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="tipoPaso" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="titulo" value="Título de la actividad :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:inputText id="titulo" value="#{pasoC.paso.titulo}" size="50" maxlength="150" required="true" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="titulo" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="responsable" value="Responsable :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:selectOneMenu id="responsable" value="#{pasoC.paso.responsable.idUsuario}" validator="#{idIntegerV.validate}" class="form-control m-b">
+                            <f:selectItem itemLabel="Seleccione una opción" itemValue="0" />
+                            <f:selectItems value="#{usuariosC.listByEquipo(flujoC.flujo.equipo.idEquipo, pasoC.paso.tipoPaso.idTipoPasoChar)}" var="usuario" itemLabel="#{usuario.nombre} #{usuario.paterno} #{usuario.materno} (#{usuario.rol.nombre})" itemValue="#{usuario.idUsuario}" />
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="responsable" class="text-danger" />
+                    </div>
+                </div>
+                
+                <p:outputPanel id="opTypes" layout="block">
+                    <div class="ibox-content #{(pasoC.paso.tipoPaso.idTipoPasoChar != null and pasoC.paso.tipoPaso.idTipoPasoChar != '0') ? '' : 'hidden'}">
+                        <c:if test="#{pasoC.paso.tipoPaso.idTipoPasoChar == 'T' ? 'true' : 'false'}">
+                            <ui:include src="tarea.xhtml" />
+                        </c:if>
+                        <c:if test="#{pasoC.paso.tipoPaso.idTipoPasoChar == 'M' ? 'true' : 'false'}">
+                            <ui:include src="mensajedirecto.xhtml" />
+                        </c:if>
+                        <c:if test="#{pasoC.paso.tipoPaso.idTipoPasoChar == 'E' ? 'true' : 'false'}">
+                            <ui:include src="mensajeequipo.xhtml" />
+                        </c:if>
+                        <c:if test="#{pasoC.paso.tipoPaso.idTipoPasoChar == 'D' ? 'true' : 'false'}">
+                            <ui:include src="decision.xhtml" />
+                        </c:if>
+                        <c:if test="#{pasoC.paso.tipoPaso.idTipoPasoChar == 'R' ? 'true' : 'false'}">
+                            <ui:include src="reunion.xhtml" />
+                        </c:if>
+                    </div>
+                </p:outputPanel>
+                
+                <div class="hr-line-dashed"></div>
+
+                <div class="form-group">
+                    <div class="col-sm-4 col-sm-offset-6">
+                        <h:commandButton value="Guardar" action="#{pasoC.save}" class="btn btn-success">
+                            <f:ajax render=":cuForm" execute="@form" />
+                        </h:commandButton>
+                        <h:commandButton value="Cancelar" action="cancel" actionListener="#{pasoC.free}" immediate="true" class="btn btn-danger" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:form>
+    
+</ui:composition>

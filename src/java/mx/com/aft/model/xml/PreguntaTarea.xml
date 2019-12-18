@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.preguntastareas">
+    
+    <resultMap id="resultPreguntaTarea" type="mx.com.aft.model.entities.PreguntaTarea">
+        <result property="idTarea" column="id_tarea" />
+        
+        <result property="pregunta.idPregunta" column="id_pregunta" />
+    </resultMap>
+    
+    <select id="recuperaPreguntasPorTarea" parameterType="int" resultMap="resultPreguntaTarea">
+        SELECT DISTINCT P.id_pregunta, PT.tareas_id_tarea id_tarea
+        FROM aft.preguntas P
+           LEFT JOIN aft.preguntas_tareas PT
+              ON PT.preguntas_id_pregunta = P.id_pregunta
+	WHERE PT.tareas_id_tarea = #{id}
+        AND P.eliminado = 0
+    </select>
+    
+    <insert id="agregaPreguntaTarea" parameterType="mx.com.aft.model.entities.PreguntaTarea">
+        INSERT INTO aft.preguntas_tareas (tareas_id_tarea, preguntas_id_pregunta)
+        VALUES (#{idTarea}, #{pregunta.idPregunta})
+    </insert>
+    
+    <delete id="eliminaPreguntasTarea" parameterType="int">
+        DELETE FROM aft.preguntas_tareas
+        WHERE tareas_id_tarea = #{id}
+    </delete>
+    
+</mapper>

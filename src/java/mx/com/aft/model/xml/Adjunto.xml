@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.adjuntos">
+    
+    <resultMap id="resultAdjunto" type="mx.com.aft.model.entities.Adjunto">
+        <result property="idSubflujo" column="id_subflujo" />
+        
+        <result property="documento.idDocumento" column="id_documento" />
+        <result property="documento.nombre" column="nombre" />
+    </resultMap>
+    
+    <select id="recuperaAdjuntoPorSubflujo" parameterType="int" resultMap="resultAdjunto">
+        SELECT A.subflujos_id_subflujo id_subflujo, D.id_documento, D.nombre
+        FROM aft.adjuntos A
+           LEFT JOIN aft.documentos D
+              ON D.id_documento = A.documentos_id_documento
+	WHERE A.subflujos_id_subflujo = #{id}
+    </select>
+    
+    <insert id="agregaAdjunto" parameterType="mx.com.aft.model.entities.Adjunto">
+        INSERT INTO aft.adjuntos (subflujos_id_subflujo, documentos_id_documento)
+        VALUES (#{idSubflujo}, #{documento.idDocumento})
+    </insert>
+    
+    <delete id="eliminaAdjunto" parameterType="int">
+        DELETE FROM aft.adjuntos
+        WHERE documentos_id_documento = #{id}
+    </delete>
+    
+</mapper>

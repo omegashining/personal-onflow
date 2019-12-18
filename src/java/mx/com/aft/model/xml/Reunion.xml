@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.reuniones">
+    
+    <resultMap id="resultReunion" type="mx.com.aft.model.entities.Reunion">
+        <id property="idReunion" column="id_reunion" />
+        <result property="tema" column="tema" />
+        <result property="puntoReunion" column="punto_reunion" />
+        <result property="fechaHora" column="fecha_hora" />
+        <result property="descripcion" column="descripcion" />
+        <result property="numeroConferencia" column="numero_conferencia" />
+        <result property="clave" column="clave" />
+        
+        <result property="criticidad.idCriticidad" column="id_criticidad" />
+        <result property="criticidad.nombre" column="nombre_criticidad" />
+        <result property="criticidad.descripcion" column="descripcion_criticidad" />
+        <result property="criticidad.diasCompromiso" column="dias_compromiso" />
+        <result property="criticidad.habilitado" column="habilitado_criticidad" />
+        <result property="criticidad.eliminable" column="eliminable_criticidad" />
+        <result property="criticidad.eliminado" column="eliminado_criticidad" />
+        
+        <result property="paso.idPaso" column="id_paso" />
+    </resultMap>
+    
+    <select id="recuperaReunionPorPaso" parameterType="int" resultMap="resultReunion">
+        SELECT R.id_reunion, R.tema, R.punto_reunion, R.fecha_hora, R.descripcion, R.numero_conferencia, R.clave, R.pasos_id_paso id_paso, 
+               C.id_criticidad, C.nombre nombre_criticidad, C.descripcion descripcion_criticidad, C.dias_compromiso, C.habilitado habilitado_criticidad, C.eliminable eliminable_criticidad, C.eliminado eliminado_criticidad
+        FROM aft.reuniones R
+          LEFT JOIN aft.criticidad C
+            ON C.id_criticidad = R.criticidad_id_criticidad
+	WHERE R.pasos_id_paso = #{id}
+    </select>
+    
+    <insert id="agregaReunion" parameterType="mx.com.aft.model.entities.Reunion" useGeneratedKeys="true" keyProperty="idReunion">
+        INSERT INTO aft.reuniones (tema, punto_reunion, fecha_hora, descripcion, numero_conferencia, clave, criticidad_id_criticidad, pasos_id_paso)
+        VALUES (#{tema}, #{puntoReunion}, #{fechaHora}, #{descripcion}, #{numeroConferencia}, #{clave}, #{criticidad.idCriticidad}, #{paso.idPaso})
+    </insert>
+    
+    <update id="actualizaReunion" parameterType="mx.com.aft.model.entities.Reunion">
+        UPDATE aft.reuniones R SET
+        R.pasos_id_paso = #{paso.idPaso}
+        <if test="tema != null and tema != ''">
+            , R.tema = #{tema}
+        </if>
+        <if test="puntoReunion != null and puntoReunion != ''">
+            , R.punto_reunion = #{puntoReunion}
+        </if>
+        <if test="fechaHora != null">
+            , R.fecha_hora = #{fechaHora}
+        </if>
+        <if test="descripcion != null and descripcion != ''">
+            , R.descripcion = #{descripcion}
+        </if>
+        <if test="numeroConferencia != null and numeroConferencia != ''">
+            , R.numero_conferencia = #{numeroConferencia}
+        </if>
+        <if test="clave != null and clave != ''">
+            , R.clave = #{clave}
+        </if>
+        <if test="criticidad.idCriticidad != null">
+            , R.criticidad_id_criticidad = #{criticidad.idCriticidad}
+        </if>
+        WHERE R.id_reunion = #{idReunion}
+    </update>
+    
+</mapper>

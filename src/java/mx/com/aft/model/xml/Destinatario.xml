@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.destinatarios">
+    
+    <resultMap id="resultDestinatario" type="mx.com.aft.model.entities.Destinatario">
+        <result property="idMensajeDirecto" column="id_mensaje_directo" />
+        
+        <result property="usuario.idUsuario" column="id_usuario" />
+        <result property="usuario.correo" column="correo" />
+    </resultMap>
+    
+    <select id="recuperaDestinatarioPorMensajeDirecto" parameterType="int" resultMap="resultDestinatario">
+        SELECT D.mensajes_directos_id_mensaje_directo id_mensaje_directo, U.id_usuario, U.correo
+        FROM aft.destinatarios D
+           LEFT JOIN aft.usuarios U
+              ON U.id_usuario = D.usuarios_id_usuario
+	WHERE D.mensajes_directos_id_mensaje_directo = #{id}
+    </select>
+    
+    <insert id="agregaDestinatario" parameterType="mx.com.aft.model.entities.Destinatario">
+        INSERT INTO aft.destinatarios (mensajes_directos_id_mensaje_directo, usuarios_id_usuario)
+        VALUES (#{idMensajeDirecto}, #{usuario.idUsuario})
+    </insert>
+    
+    <delete id="eliminaDestinatarios" parameterType="int">
+        DELETE FROM aft.destinatarios
+        WHERE mensajes_directos_id_mensaje_directo = #{id}
+    </delete>
+    
+</mapper>

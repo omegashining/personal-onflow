@@ -1,0 +1,129 @@
+{
+  "app": {
+    "name": "Lotar 1.0"
+  },
+  "login": {
+    "welcome": "Bienvenido a Lotar",
+    "logout": "La sesión se ha cerrado correctamente.",
+    "message": "Inicie sesión con alguna de sus cuentas en redes sociales.",
+    "facebook": "Entrar con Facebook",
+    "twitter": "Entrar con Twitter",
+    "google": "Entrar con Google",
+    "email": "* Correo electrónico :",
+    "password": "* Contraseña :",
+    "rememberme": "Recuérdame :",
+    "required": "Obligatorio (*)",
+    "enter": "Iniciar sesión",
+    "forgotten": "¿Olvidó su contraseña?",
+    "noaccount": "¿No tiene cuenta?",
+    "createaccount": "Crear cuenta"
+  },
+  "signup": {
+    "registration": "Formulario de registro de Lotar",
+    "message": "Por favor, llene todos los campos marcados como obligatorios.",
+    "username": "Nombre de Usuario *",
+    "firstname": "Nombre(s) *",
+    "lastname": "Apellido(s) *",
+    "email": "Correo electrónico *",
+    "password": "Contraseña *",
+    "confirm": "Confirmar contraseña *",
+    "required": "Obligatorio (*)",
+    "enter": "Enviar Formulario"
+  },
+  "side": {
+    "dashboard": "Tablero",
+    "transactions": "Transacciones"
+  },
+  "body": {
+  },
+  "nav": {
+    "logout": "Cerrar sesión"
+  },
+  "foot": {
+    "language": "Lenguaje"
+  },
+  "home": {
+    "invest": "Invertir",
+    "investments": "Inversiones"
+  },
+  "investment": {
+    "welcome": "Bienvenido(a)",
+    "email": "Correo Electrónico",
+    "deposits1": "Para inversiones en efectivo.",
+    "deposits2": "1. Realice su depósito en la siguiente cuenta bancaria:",
+    "deposits3": "Banco: Scotiabank (Inverlat Express)",
+    "deposits4": "Nombre: Kalep González Blanco",
+    "deposits5": "Cuenta: 18502443058",
+    "deposits6": "Sucursal: 008",
+    "deposits7": "CLABE: 044060185024430580",
+    "deposits8": "2. Envíe su comprobante de pago al correo support@lotar.mx o lotar@gmail.com donde se le dará seguimiento.",
+    "deposits9": "3. Una vez acreditado se actualizará el saldo de su cuenta.",
+    "oxxo1": "Para inversiones en OXXO.",
+    "oxxo2": "1. Haz tu deposito en OXXO con la siguiente información:",
+    "oxxo3": "Número de Tarjeta: 5579 2250 4081 8208",
+    "oxxo4": "2. Envíe su comprobante de pago al correo support@lotar.mx o lotar@gmail.com donde se le dará seguimiento.",
+    "oxxo5": "3. Una vez acreditado se actualizará el saldo de su cuenta.",
+    "confirm": "Introduzca el código que recibio por correo para validar su cuenta.",
+    "resend": "Si no recibió el correo, haz clic en el siguiente enlace para enviarlo de nuevo.",
+    "send": "Enviar",
+    "title1": "Inversión",
+    "subtitle1": "Datos para invertir",
+    "important": "¡IMPORTANTE!",
+    "importantmessage1": "Al pagar con está moneda se le cobrará una comisión, ya que la plataforma realizá una conversión a Bitcoins.",
+    "importantmessage2": "Lo sentimos, temporalmente no se pueden realizar transacciones con esta criptomoneda.",
+    "coin": "Moneda",
+    "amount": "Monto",
+    "amountbtc": "Monto (BTC)",
+    "fee": "Comisión (BTC)",
+    "bankcoins": "Bankcoins a recibir",
+    "required": "(*) Obligatorio",
+    "title2": "Pago",
+    "subtitle2": "Datos para pagar",
+    "informative": "¡INFORMATIVO!",
+    "informativemessage": "Todavía no ha realizado el pago o está en proceso de validación.",
+    "token": "Dirección para depositar",
+    "lastdeposits": "Últimos depositos",
+    "datetime": "Fecha/Hora",
+    "quantity": "Cantidad",
+    "tax": "Impuesto",
+    "total": "Total",
+    "status": "Estatus",
+    "title3": "Resumen",
+    "subtitle3": "Datos informativos",
+    "end": "Finalizar Inversión",
+    "investment": "Inversión",
+    "btcinvestment": "Inversión en Bitcoins:",
+    "bnkinvestment": "Mis Bankcoins:",
+    "balance": "Saldo en las Carteras",
+    "btcbalance": "BTC:",
+    "ltcbalance": "LTC:",
+    "etcbalance": "ETC:",
+    "ethbalance": "ETH:",
+    "nxtbalance": "NXT:",
+    "wavesbalance": "WAVES:",
+    "pesosbalance": "PESOS:",
+    "logout": "Cerrar Sesión"
+  },
+  "transactionsinvest": {
+    "title": "Inversiones",
+    "datetime": "Fecha/Hora",
+    "coin": "Moneda",
+    "quantity": "Cantidad",
+    "bitcoins": "Bitcoins",
+    "bankcoins": "Bankcoins",
+    "status": "Estatus"
+  },
+  "dashboard": {
+    "price": "Precio",
+    "volume": "Volúmen",
+    "market": "Capitalización en el mercado",
+    "avaiable": "Suministro disponible",
+    "total": "Suministro total",
+    "rate": "Tasa de cambio",
+    "lasthours": "Últimas 24 horas",
+    "lastday": "Último día",
+    "lasthour": "Última hora",
+    "lastdays": "Últimos 7 días"
+  }
+
+}

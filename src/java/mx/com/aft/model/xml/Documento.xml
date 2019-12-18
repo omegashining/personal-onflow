@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.documentos">
+    
+    <resultMap id="resultDocumento" type="mx.com.aft.model.entities.Documento">
+        <id property="idDocumento" column="id_documento" />
+        <result property="nombre" column="nombre" />
+        <result property="contenido" column="contenido" />
+        
+        <result property="tipoDocumento.idTipoDocumento" column="id_tipo_documento" />
+        <result property="tipoDocumento.nombre" column="nombre_tipo_documento" />
+        <result property="tipoDocumento.descripcion" column="descripcion" />
+        <result property="tipoDocumento.extension" column="extension" />
+        <result property="tipoDocumento.mimetype" column="mimetype" />
+    </resultMap>
+    
+    <select id="recuperaDocumentos" parameterType="mx.com.aft.model.entities.Documento" resultMap="resultDocumento">
+        SELECT D.id_documento, D.nombre, D.contenido,
+               TD.id_tipo_documento, TD.nombre nombre_tipo_documento, TD.descripcion, TD.extension, TD.mimetype
+        FROM aft.documentos TD
+           LEFT JOIN aft.tipos_documento TD
+              ON TD.id_tipo_documento = D.tipos_documento_id_tipo_documento
+	WHERE D.id_documento > 0
+    </select>
+    
+    <select id="recuperaDocumentoPorId" parameterType="int" resultMap="resultDocumento">
+        SELECT D.id_documento, D.nombre, D.contenido,
+               TD.id_tipo_documento, TD.nombre nombre_tipo_documento, TD.descripcion, TD.extension, TD.mimetype
+        FROM aft.documentos D
+           LEFT JOIN aft.tipos_documento TD
+              ON TD.id_tipo_documento = D.tipos_documento_id_tipo_documento
+	WHERE D.id_documento = #{id}
+    </select>
+    
+    <insert id="agregaDocumento" parameterType="mx.com.aft.model.entities.Documento" useGeneratedKeys="true" keyProperty="idDocumento">
+        INSERT INTO aft.documentos (nombre, contenido, tipos_documento_id_tipo_documento)
+        VALUES (#{nombre}, #{contenido}, #{tipoDocumento.idTipoDocumento})
+    </insert>
+    
+    <update id="actualizaDocumento" parameterType="mx.com.aft.model.entities.Documento">
+        UPDATE aft.documentos D SET
+        D.nombre = #{nombre}
+        <if test="contenido != null">
+            , D.contenido = #{contenido}
+        </if>
+        <if test="tipoDocumento.idTipoDocumento != 0">
+            , D.tipos_documento_id_tipo_documento = #{tipoDocumento.idTipoDocumento}
+        </if>
+        WHERE D.id_documento = #{idDocumento}
+    </update>
+    
+    <delete id="eliminaDocumento" parameterType="int">
+        DELETE FROM aft.documentos
+        WHERE id_documento = #{id}
+    </delete>
+    
+</mapper>

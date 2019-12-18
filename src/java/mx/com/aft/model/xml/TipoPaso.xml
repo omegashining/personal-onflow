@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.tipospaso">
+    
+    <resultMap id="resultTipoPaso" type="mx.com.aft.model.entities.TipoPaso">
+        <id property="idTipoPaso" column="id_tipo_paso" />
+        <result property="idTipoPasoChar" column="id_tipo_paso_char" />
+        <result property="nombre" column="nombre" />
+        <result property="descripcion" column="descripcion" />
+        <result property="habilitado" column="habilitado" />
+        <result property="eliminable" column="eliminable" />
+        <result property="eliminado" column="eliminado" />
+    </resultMap>
+    
+    <select id="recuperaTiposPaso" parameterType="mx.com.aft.model.entities.TipoPaso" resultMap="resultTipoPaso">
+        SELECT TP.id_tipo_paso, TP.id_tipo_paso_char, TP.nombre, TP.descripcion, TP.habilitado, TP.eliminable, TP.eliminado
+        FROM aft.tipos_paso TP
+	WHERE TP.id_tipo_paso > 0
+    </select>
+    
+    <select id="recuperaTipoPasoPorId" parameterType="int" resultMap="resultTipoPaso">
+        SELECT TP.id_tipo_paso, TP.id_tipo_paso_char, TP.nombre, TP.descripcion, TP.habilitado, TP.eliminable, TP.eliminado
+        FROM aft.tipos_paso TP
+	WHERE TP.id_tipo_paso = #{id}
+    </select>
+    
+</mapper>

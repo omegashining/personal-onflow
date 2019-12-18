@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="aft.roles">
+    
+    <resultMap id="resultRol" type="mx.com.aft.model.entities.Rol">
+        <id property="idRol" column="id_rol" />
+        <result property="idRolChar" column="id_rol_char" />
+        <result property="nombre" column="nombre" />
+        <result property="descripcion" column="descripcion" />
+        <result property="prioridad" column="prioridad" />
+        <result property="habilitado" column="habilitado" />
+        <result property="eliminable" column="eliminable" />
+        <result property="eliminado" column="eliminado" />
+    </resultMap>
+    
+    <select id="recuperaRolesSistema" parameterType="mx.com.aft.model.entities.Rol" resultMap="resultRol">
+        SELECT R.id_rol, R.id_rol_char, R.nombre, R.descripcion, R.prioridad, R.habilitado, R.eliminable, R.eliminado
+        FROM aft.roles R
+	WHERE R.id_rol > 1
+	AND R.id_rol &lt; 4
+        AND R.eliminado = 0
+    </select>
+    
+    <select id="recuperaRoles" parameterType="mx.com.aft.model.entities.Rol" resultMap="resultRol">
+        SELECT R.id_rol, R.id_rol_char, R.nombre, R.descripcion, R.prioridad, R.habilitado, R.eliminable, R.eliminado
+        FROM aft.roles R
+	WHERE R.id_rol > 1
+        AND R.eliminado = 0
+    </select>
+    
+    <select id="recuperaRolPorId" parameterType="int" resultMap="resultRol">
+        SELECT R.id_rol, R.id_rol_char, R.nombre, R.descripcion, R.prioridad, R.habilitado, R.eliminable, R.eliminado
+        FROM aft.roles R
+	WHERE R.id_rol = #{id}
+    </select>
+    
+    <select id="recuperaRolPorIdChar" parameterType="string" resultMap="resultRol">
+        SELECT R.id_rol, R.id_rol_char, R.nombre, R.descripcion, R.prioridad, R.habilitado, R.eliminable, R.eliminado
+        FROM aft.roles R
+	WHERE R.id_rol_char = #{id}
+    </select>
+    
+    <insert id="agregaRol" parameterType="mx.com.aft.model.entities.Rol" useGeneratedKeys="true" keyProperty="idRol">
+        INSERT INTO aft.roles (id_rol_char, nombre, descripcion, prioridad, habilitado, eliminable, eliminado)
+        VALUES (#{idRolChar}, #{nombre}, #{descripcion}, #{prioridad}, #{habilitado}, #{eliminable}, #{eliminado})
+    </insert>
+    
+    <update id="actualizaRol" parameterType="mx.com.aft.model.entities.Rol">
+        UPDATE aft.roles R SET
+        R.nombre = #{nombre}
+        <if test="idRolChar != null and idRolChar != ''">
+            , R.id_rol_char = #{idRolChar}
+        </if>
+        <if test="descripcion != null and descripcion != ''">
+            , R.descripcion = #{descripcion}
+        </if>
+        <if test="prioridad != 0">
+            , R.prioridad = #{prioridad}
+        </if>
+        WHERE R.id_rol = #{idRol}
+    </update>
+    
+    <update id="eliminaRol" parameterType="int">
+        UPDATE aft.roles R SET
+        R.habilitado = 0
+        , R.eliminado = 1
+        WHERE R.id_rol = #{id}
+    </update>
+    
+</mapper>

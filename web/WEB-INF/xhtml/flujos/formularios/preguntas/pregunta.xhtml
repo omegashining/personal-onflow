@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form id="cuForm" class="form-horizontal">
+        <ui:include src="/WEB-INF/xhtml/general/errormessages.xhtml" />
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title text-left">
+                <h:outputLabel value="* Campos requeridos" class="text-danger" />
+            </div>
+
+            <div class="ibox-content">
+                <div class="form-group">
+                    <h:outputLabel for="pregunta" value="Pregunta :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:inputText id="pregunta" value="#{preguntaC.pregunta.pregunta}" size="45" maxlength="45" a:autofocus="true" required="true" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="pregunta" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="variable" value="Variable :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:selectOneMenu id="variable" value="#{preguntaC.pregunta.variable}" validator="#{idStringV.validate}" class="form-control m-b">
+                            <f:selectItem itemLabel="Seleccione una opción" itemValue="-" />
+                            <f:selectItems value="#{preguntaC.variablesSinAsignar}" var="variable" itemLabel="#{variable.nombre}" itemValue="#{variable.nombre}" />
+                            <f:ajax execute="@this" event="change" listener="#{preguntaC.cambiarVariablePregunta}" />
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="variable" class="text-danger" />
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <h:outputLabel for="tipoPregunta" value="Tipo de Pregunta :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:selectOneMenu id="tipoPregunta" value="#{preguntaC.pregunta.tipoPregunta.idTipoPregunta}" validator="#{idIntegerV.validate}" class="form-control m-b" rendered="#{!preguntaC.creado}">
+                            <f:selectItem itemLabel="Seleccione una opción" itemValue="0" />
+                            <f:selectItems value="#{tiposPreguntaC.list()}" var="tipoPregunta" itemLabel="#{tipoPregunta.nombre}" itemValue="#{tipoPregunta.idTipoPregunta}" />
+                            <f:ajax execute="@this" event="change" listener="#{preguntaC.cambiarTipoPregunta}" render="opCatalog" />
+                        </h:selectOneMenu>
+                        <h:outputLabel id="tipoPreguntaC" value="#{preguntaC.pregunta.tipoPregunta.nombre}" rendered="#{preguntaC.creado}" />
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        <h:message for="tipoPregunta" class="text-danger" />
+                    </div>
+                </div>
+
+                <h:panelGroup id="opCatalog" layout="block">
+                    <div class="hr-line-dashed #{preguntaC.pregunta.tipoPregunta.idTipoPreguntaChar == 'C' ? '' : 'hidden'}"></div>
+
+                    <div class="form-group #{preguntaC.pregunta.tipoPregunta.idTipoPreguntaChar == 'C' ? '' : 'hidden'}">
+                        <h:outputLabel for="nombreCatalogo" value="Nombre del Catálogo :" class="col-sm-2 col-sm-offset-1 control-label" rendered="#{preguntaC.pregunta.tipoPregunta.idTipoPreguntaChar == 'C'}" />
+                        <div class="col-sm-5">
+                            <h:selectOneMenu id="nombreCatalogo" value="#{preguntaC.pregunta.nombreCatalogo.idNombreCatalogo}" validator="#{idIntegerV.validate}" class="form-control m-b" rendered="#{preguntaC.pregunta.tipoPregunta.idTipoPreguntaChar == 'C'}">
+                                <f:selectItem itemLabel="Seleccione una opción" itemValue="0" />
+                                <f:selectItems value="#{nombresCatalogosC.list()}" var="nombreCatalogo" itemLabel="#{nombreCatalogo.nombre}" itemValue="#{nombreCatalogo.idNombreCatalogo}" />
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="col-sm-2 text-left">
+                            <h:message for="nombreCatalogo" class="text-danger" rendered="#{preguntaC.pregunta.tipoPregunta.idTipoPreguntaChar == 'C'}" />
+                        </div>
+                    </div>
+                </h:panelGroup>>
+
+                <div class="hr-line-dashed"></div>
+
+                <div class="form-group">
+                    <div class="col-sm-4 col-sm-offset-6">
+                        <h:commandButton value="Guardar" action="#{preguntaC.save}" class="btn btn-success">
+                            <f:ajax render=":cuForm" execute="@form" />
+                        </h:commandButton>
+                        <h:commandButton value="Cancelar" action="cancel" actionListener="#{preguntaC.free}" immediate="true" class="btn btn-danger" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:form>
+    
+</ui:composition>

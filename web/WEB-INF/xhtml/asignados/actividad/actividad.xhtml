@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <h:form id="cuForm" class="form-horizontal">
+        <ui:include src="/WEB-INF/xhtml/general/errormessages.xhtml" />
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title text-left">
+                <h:outputLabel value="* Campos requeridos" class="text-danger" />
+            </div>
+
+            <div class="ibox-content">
+                <div class="form-group">
+                    <h:outputLabel value="Título de la actividad :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:outputLabel value="#{actividadC.paso.titulo}" class="control-label text-success" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel value="Tipo de Paso :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:outputLabel value="#{actividadC.paso.tipoPaso.nombre}" class="control-label text-success" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel value="Responsable :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:outputLabel value="#{actividadC.paso.responsable.nombre} #{actividadC.paso.responsable.paterno} #{actividadC.paso.responsable.materno}" class="control-label text-success" />
+                    </div>
+                </div>
+
+                <c:if test="#{actividadC.paso.tipoPaso.idTipoPasoChar == 'T' ? 'true' : 'false'}">
+                    <ui:include src="tarea.xhtml" />
+                </c:if>
+                <c:if test="#{actividadC.paso.tipoPaso.idTipoPasoChar == 'D' ? 'true' : 'false'}">
+                    <ui:include src="decision.xhtml" />
+                </c:if>
+                <c:if test="#{actividadC.paso.tipoPaso.idTipoPasoChar == 'R' ? 'true' : 'false'}">
+                    <ui:include src="reunion.xhtml" />
+                </c:if>
+                
+                <div class="hr-line-dashed"></div>
+
+                <h:panelGroup id="opQuestions" layout="block" rendered="#{actividadC.preguntas != null}">
+                    <h3 class="text-center"><h:outputLabel value="Preguntas del formulario" class="text-navy" /></h3>
+
+                    <c:forEach items="#{actividadC.preguntas}" var="pregunta">
+                        <div class="form-group">
+                            <h:outputLabel value="#{pregunta.pregunta} :" class="col-sm-2 col-sm-offset-1 control-label" />
+                            <div class="col-sm-5">
+                                <c:if test="#{pregunta.tipoPregunta.idTipoPreguntaChar == 'T' ? 'true' : 'false'}">
+                                    <h:inputText id="pregunta_#{pregunta.idPregunta}" value="#{pregunta.respuesta}" size="40" required="true" class="form-control" />
+                                </c:if>
+                                <c:if test="#{pregunta.tipoPregunta.idTipoPreguntaChar == 'E' ? 'true' : 'false'}">
+                                    <h:inputText id="pregunta_#{pregunta.idPregunta}" value="#{pregunta.respuesta}" onkeypress="return onlynumbers(event, this, false);" size="40" required="true" class="form-control" />
+                                </c:if>
+                                <c:if test="#{pregunta.tipoPregunta.idTipoPreguntaChar == 'D' ? 'true' : 'false'}">
+                                    <h:inputText id="pregunta_#{pregunta.idPregunta}" value="#{pregunta.respuesta}" onkeypress="return onlynumbers(event, this, true);" size="40" required="true" class="form-control" />
+                                </c:if>
+                                <c:if test="#{pregunta.tipoPregunta.idTipoPreguntaChar == 'C' ? 'true' : 'false'}">
+                                    <h:selectOneMenu id="pregunta_#{pregunta.idPregunta}" value="#{pregunta.respuesta}" style="width: 300px;" required="true" class="form-control m-b">
+                                        <f:selectItems value="#{catalogosC.list(pregunta.nombreCatalogo.idNombreCatalogo)}" var="catalogo" itemLabel="#{catalogo.descripcion}" itemValue="#{catalogo.descripcion}" />
+                                    </h:selectOneMenu>
+                                </c:if>
+                            </div>
+                            <div class="col-sm-2 text-left">
+                                <h:message for="pregunta_#{respuesta.pregunta.idPregunta}" styleClass="required" />
+                            </div>
+                        </div>
+                    </c:forEach>
+                </h:panelGroup>
+            
+                <div class="hr-line-dashed"></div>
+
+                <div class="form-group">
+                    <div class="col-sm-4 col-sm-offset-6">
+                        <h:commandButton value="Finalizar" action="#{asignadoC.save}" class="btn btn-success">
+                            <f:ajax render=":cuForm" execute="@form" />
+                        </h:commandButton>
+                        <h:commandButton value="Cancelar" action="cancel" actionListener="#{asignadoC.free}" immediate="true" class="btn btn-danger" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:form>
+    
+    <h:form id="cuForm2" enctype="multipart/form-data" class="form-horizontal">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title text-left">
+                <h3><h:outputLabel value="Documentos del subflujo" class="col-sm-offset-1 text-navy" /></h3>
+            </div>
+
+            <div class="ibox-content">
+                <div class="form-group">
+                    <h:outputLabel for="documento" value="Documento :" class="col-sm-2 col-sm-offset-1 control-label" />
+                    <div class="col-sm-5">
+                        <h:inputFile id="documento" label="file" value="#{actividadC.part}" validator="#{fileUploadV.validate}" required="true">
+                            <f:attribute name="detail" value="**" />
+                            <f:attribute name="fieldName" value="Documento" />
+                            <f:attribute name="fileNameSize" value="50" />
+                            <f:attribute name="fileTypes" value="doc,docx,ppt,pptx,xls,xlsx,pdf" />
+                            <f:attribute name="fileSize" value="5242880" /> <!-- 5MB -->
+                        </h:inputFile>
+                    </div>
+                    <div class="col-sm-1 text-left">
+                        <h:commandButton value="Subir" action="#{actividadC.fileUpload}" class="btn btn-success">
+                            <f:ajax render=":cuForm2" execute="@form" />
+                        </h:commandButton>
+                    </div>
+                </div>
+                
+                <div class="col-sm-6 col-sm-offset-2">
+                    <table class="table table-hover">
+                        <tbody>
+                            <c:forEach items="#{asignadosC.getAdjuntos(asignadoC.subflujo.idSubflujo)}" var="adjunto">
+                                <tr>
+                                    <td class="project-status">
+                                        <h:graphicImage url="/resources/images/png/doc.png" />
+                                    </td>
+                                    <td class="project-title">
+                                        <h:outputLabel value="#{adjunto.documento.nombre}" />
+                                    </td>
+                                    <td class="project-actions">
+                                        <p:commandLink ajax="false" immediate="true">
+                                            <i class="fa fa-download"></i> Descargar
+                                            <p:fileDownload value="#{asignadosC.getEntregable(adjunto.documento.idDocumento)}" />
+                                        </p:commandLink>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-group">
+                </div>
+            </div>
+        </div>
+    </h:form>
+    
+</ui:composition>

@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <div class="form-group">
+        <h:outputLabel for="descripcion" value="Descripción :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:inputTextarea id="descripcion" value="#{tareaC.tarea.descripcion}" cols="80" rows="4" a:maxlength="255" required="true" class="form-control" />
+        </div>
+        <div class="col-sm-2 text-left">
+            <h:message for="descripcion" class="text-danger" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <h:outputLabel for="criticidad" value="Criticidad :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:selectOneMenu id="criticidad" value="#{tareaC.tarea.criticidad.idCriticidad}" validator="#{idIntegerV.validate}" class="form-control m-b">
+                <f:selectItem itemLabel="Seleccione una opción" itemValue="0" />
+                <f:selectItems value="#{criticidadesC.list()}" var="criticidad" itemLabel="#{criticidad.nombre}" itemValue="#{criticidad.idCriticidad}" />
+            </h:selectOneMenu>
+        </div>
+        <div class="col-sm-2 text-left">
+            <h:message for="criticidad" class="text-danger" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <h:outputLabel for="asignar" value="¿Asignar preguntas? :" class="col-sm-2 col-sm-offset-1 control-label" />
+        <div class="col-sm-5">
+            <h:selectBooleanCheckbox id="asignar" value="#{tareaC.asignarPreguntas}">
+                <f:ajax execute="@this" event="change" render="opQuestions" />
+            </h:selectBooleanCheckbox>
+        </div>
+        <div class="col-sm-2 text-left">
+            <h:message for="asignar" class="text-danger" />
+        </div>
+    </div>
+
+    <h:panelGroup id="opQuestions" layout="block">
+        <div class="form-group #{tareaC.asignarPreguntas ? '' : 'hidden'}">
+            <h:outputLabel for="preguntas" value="" class="col-sm-2 col-sm-offset-1 control-label" />
+            <div class="col-sm-5">
+                <p:pickList id="preguntas" value="#{tareaC.preguntasTarea}" var="preguntaTarea" converter="#{entityConverter}" itemLabel="#{preguntaTarea.pregunta.pregunta}" itemValue="#{preguntaTarea}" showSourceFilter="true" showTargetFilter="true" effect="bounce" responsive="true" required="true" />
+            </div>
+            <div class="col-sm-2 text-left">
+                <h:message for="preguntas" styleClass="required" />
+            </div>
+        </div>
+    </h:panelGroup>
+    
+    <style>
+        .ui-picklist-list {
+            height:200px !important;
+            min-width:100px !important;
+            width:160px !important;
+        }
+    </style>
+    
+    <!--p:outputLabel for="titulo_tarea" value="Título de la tarea :" styleClass="title" />
+    <p:inputText id="titulo_tarea" value="{tareaC.tarea.titulo}" size="45" maxlength="45" required="true" />
+    <h:message for="titulo_tarea" styleClass="required" /-->
+
+    <!--p:outputLabel value="Documentos :" styleClass="title" />
+    <p:commandButton value="Examinar ..." immediate="true" />
+    <h:outputText value="" /-->
+    
+</ui:composition>
